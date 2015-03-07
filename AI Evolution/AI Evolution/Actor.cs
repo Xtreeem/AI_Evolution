@@ -39,5 +39,10 @@ namespace AI_Evolution
             if (_current_Health <= 0)
                 _alive = false;
         }
+
+        public void Heal(float Amount)
+        {
+           _current_Health = MathHelper.Clamp(_current_Health + Amount, 1, _stats.Health);
+        }
     }
 }

@@ -10,7 +10,7 @@ namespace AI_Evolution
 
         public Hero(Actor P1, Actor P2)
         {
-            GenerateStats_Breed(P1, P2,);
+            GenerateStats_Breed(P1, P2);
             GeneratePerks(P1, P2);
             _current_Health = _stats.Health;
 
