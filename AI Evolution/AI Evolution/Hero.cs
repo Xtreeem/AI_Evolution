@@ -10,7 +10,7 @@ namespace AI_Evolution
 
         public Hero(Actor P1, Actor P2)
         {
-            GenerateStats_Breed(P1, P2,);
+            GenerateStats_Breed(P1, P2);
             GeneratePerks(P1, P2);
             _current_Health = _stats.Health;
 
@@ -23,13 +23,19 @@ namespace AI_Evolution
 
 
 
-        private void GenerateStats_Breed(Actor P1, Actor P2)
-        {
-            //Super breed funky town
+        //private void GenerateStats_Breed(Actor P1, Actor P2)
+        //{
+        //    //Super breed funky town
+
+        //   int p1Part = Misc.Random.Next(1, 2);
+           
 
 
+            
+            
+        //}
 
-        }
+        
 
         private void GeneratePerks(Actor P1, Actor P2)
         {
