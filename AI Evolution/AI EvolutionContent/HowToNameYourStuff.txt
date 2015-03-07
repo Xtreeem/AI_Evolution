@@ -1,0 +1,12 @@
+
+Classvaribles - Naming
+	varible inside method		lowercase					ex. actor
+	within class				underscore, lowercase		ex. _actor
+	visable outside class		uppercase					ex. Actor
+
+	When needing a classvarible utside class, create a get-property with 
+	the same name skipping underscore and lowercase.
+
+ClassMethods
+	Use underscore to mark different words					ex. Recovery_Phase
+	Use camelbacking except for in prepositions(for,to,of)	ex. Roll_for_Initiative

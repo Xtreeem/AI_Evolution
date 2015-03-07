@@ -74,7 +74,7 @@ namespace AI_Evolution
         public float Magic_Resist { get { return _mDef; } }
         private float _mDef;
 
-        public float Mana { get { return _mp; } }
+        public int Mana { get { return (int)_mp; } }
         private float _mp;
 
         #endregion
