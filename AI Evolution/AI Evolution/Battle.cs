@@ -15,6 +15,7 @@ namespace AI_Evolution
         private float _fitnessValue;
 
         private Actor _hero, _enemy;
+        private float _heroHealthAtTurnStart, _enemyHealthAtTurnStart;
         private float _turnTimer;
         private Random _rand;
 
@@ -49,17 +50,22 @@ namespace AI_Evolution
 
         private void StartCombatTurn()
         {
+            _heroHealthAtTurnStart = _hero.Current_Health;
+            _enemyHealthAtTurnStart = _enemy.Current_Health;
             Actor inititiveWinner;
             Actor inititiveLoser;
             Roll_for_Initiative(out inititiveWinner, out inititiveLoser);
-
-            Physical_Phase(ref inititiveWinner, ref inititiveLoser);
-            Magical_Phase();
+            if (Physical_Phase(ref inititiveWinner, ref inititiveLoser))
+                Combat_Over();
+            Roll_for_Initiative(out inititiveWinner, out inititiveLoser);
+            if (Magical_Phase(ref inititiveWinner, ref inititiveLoser))
+                Combat_Over();
         }
 
         private void Combat_Over()
         {
-
+            _finished = true;
+            _fitnessValue = Math.Abs(_enemy.Current_Health - _enemy.Stats.Health);
         }
 
         private void Roll_for_Initiative(out Actor Winner, out Actor Loser)
@@ -121,7 +127,37 @@ namespace AI_Evolution
                 Defender.Take_Damage(Attacker.Stats.Physical_Attack);
         }
 
-        private void Magical_Phase()
+        private bool Magical_Phase(ref Actor A1, ref Actor A2)
+        {
+            int remainingAttacksA1 = A1.Stats.Mana;
+            int remainingAttacksA2 = A2.Stats.Mana;
+
+            do
+            {
+                if (remainingAttacksA1 != 0)
+                {
+                    remainingAttacksA1--;
+                    Physical_Attack(ref A1, ref A2);
+                    if (DeathCheck(ref A2))
+                        return true;
+                }
+                if (remainingAttacksA2 != 0)
+                {
+                    remainingAttacksA2--;
+                    Physical_Attack(ref A2, ref A1);
+                    if (DeathCheck(ref A1))
+                        return true;
+                }
+            } while (remainingAttacksA1 != 0 && remainingAttacksA2 != 0);
+            return false;
+        }
+
+        private void Magical_Attack()
+        {
+
+        }
+
+        private void Recovery_Phase()
         {
 
         }
