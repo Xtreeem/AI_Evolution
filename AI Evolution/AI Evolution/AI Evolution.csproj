@@ -88,10 +88,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\InputManager\InputManager\InputManager.csproj">
-      <Project>{aa15a505-2e6c-492b-a4f0-21fa0bb2e18f}</Project>
-      <Name>InputManager</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Character\Avatar.csproj">
       <Project>{72e0bd30-a4dd-4fd5-a53e-756fc91dd09f}</Project>
       <Name>Avatar</Name>
