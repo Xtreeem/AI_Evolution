@@ -20,9 +20,15 @@ namespace AI_Evolution
             _enemy = Enemy;
         }
 
-        public void Update(GameTime GT)
+        public void Update(GameTime GT, float TurnLength)
         {
-
+            if (_battle.IsFinished)
+                return;
+            else
+                _battle.Update(GT, TurnLength);
         }
+
+
+
     }
 }

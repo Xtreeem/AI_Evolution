@@ -15,9 +15,10 @@ namespace AI_Evolution
 {
     public class Game1 : Microsoft.Xna.Framework.Game
     {
+        float _turnLength = 100;
         const int _numberOfScenes = 2;
-        Scene[] Scenes = new Scene[_numberOfScenes];
-        Task[] Tasks = new Task[_numberOfScenes];
+        Scene[] _scenes = new Scene[_numberOfScenes];
+        Task[] _tasks = new Task[_numberOfScenes];
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -91,7 +92,7 @@ namespace AI_Evolution
             Actor Enemy = new Hero(new Stats(10, 10, 100, 10, 10, 10, 10));
             for (int i = 0; i < _numberOfScenes; i++)
             {
-                Scenes[i] = new Scene(ref Heroes[i], Enemy);
+                _scenes[i] = new Scene(ref Heroes[i], Enemy);
             }
 
 
@@ -115,12 +116,12 @@ namespace AI_Evolution
         protected override void Update(GameTime gameTime)
         {
             BattleTest.Update(gameTime, 1);
-            for (int z = 0; z < Scenes.Length; z++)
+            for (int z = 0; z < _scenes.Length; z++)
             {
-                Scene TS = Scenes[z];
-                Tasks[z] = Task.Factory.StartNew(() => TS.Update(gameTime));
+                Scene TS = _scenes[z];
+                _tasks[z] = Task.Factory.StartNew(() => TS.Update(gameTime, _turnLength));
             }
-            Task.WaitAll(Tasks);
+            Task.WaitAll(_tasks);
 
             //if (InputManager.InputManager.LeftMousePress())
             //    for (int i = 0; i < _dummies.Count; i++)
