@@ -21,12 +21,7 @@ namespace AI_Evolution
             _current_Health = _stats.Health;
         }
 
-        public void Take_Damage(float Amount)
-        {
-            _current_Health -= Amount;
-            if (_current_Health <= 0)
-                _alive = false;
-        }
+
 
         private void GenerateStats_Breed(Actor P1, Actor P2)
         {

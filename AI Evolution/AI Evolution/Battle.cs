@@ -18,6 +18,7 @@ namespace AI_Evolution
         private float _turnTimer;
         private Random _rand;
 
+        private const int _baseHitChance = 50;
 
         public Battle(ref Actor Hero, Actor Enemy, int RandomSeed)
         {
@@ -56,6 +57,11 @@ namespace AI_Evolution
             Magical_Phase();
         }
 
+        private void Combat_Over()
+        {
+
+        }
+
         private void Roll_for_Initiative(out Actor Winner, out Actor Loser)
         {
             float heroInitiativeRoll = _rand.Next(1, 1);
@@ -77,7 +83,7 @@ namespace AI_Evolution
             }
         }
 
-        private void Physical_Phase(ref Actor A1, ref Actor A2)
+        private bool Physical_Phase(ref Actor A1, ref Actor A2)
         {
             int remainingAttacksA1 = A1.Stats.Number_of_Attacks;
             int remainingAttacksA2 = A2.Stats.Number_of_Attacks;
@@ -89,21 +95,30 @@ namespace AI_Evolution
                     remainingAttacksA1--;
                     Physical_Attack(ref A1, ref A2);
                     if (DeathCheck(ref A2))
-                        return;
+                        return true;
                 }
                 if (remainingAttacksA2 != 0)
                 {
                     remainingAttacksA2--;
                     Physical_Attack(ref A2, ref A1);
                     if (DeathCheck(ref A1))
-                        return;
+                        return true;
                 }
             } while (remainingAttacksA1 != 0 && remainingAttacksA2 != 0);
-
+            return false;
         }
 
         private void Physical_Attack(ref Actor Attacker, ref Actor Defender)
         {
+            float T100 = _rand.Next(1, 101);
+            T100 -= Defender.Stats.Dodge_Chance;
+            if (T100 < _baseHitChance)
+                return;
+            T100 = _rand.Next(1, 101);
+            if (T100 < Attacker.Stats.Critical_Hit_Chance - Defender.Stats.Resilience)
+                Defender.Take_Damage(Attacker.Stats.Physical_Attack * 2);
+            else
+                Defender.Take_Damage(Attacker.Stats.Physical_Attack);
         }
 
         private void Magical_Phase()

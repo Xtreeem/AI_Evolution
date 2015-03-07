@@ -116,27 +116,27 @@ namespace AI_Evolution
         #region Sub Stat Functions
         private void Calc_CHC()
         {
-            _chc = MathHelper.Clamp(5f + (Dexterity + Intelligence) / 200f, 5f, 50f);
+            _chc = MathHelper.Clamp(5f + (Dexterity + Intelligence) / 2f, 5f, 50f);
         }
 
         private void Calc_Dodge()
         {
-            _dodge = MathHelper.Clamp((Perception * 0.5f + Dexterity * 1.5f) / 200, 0f, 50f);
+            _dodge = MathHelper.Clamp((Perception * 0.5f + Dexterity * 1.5f) / 2f, 0f, 50f);
         }
 
         private void Calc_Res()
         {
-            _res = MathHelper.Clamp((Wisdom + Dexterity) / 200, 0f, 50f);
+            _res = MathHelper.Clamp((Wisdom + Dexterity) / 2f, 0f, 50f);
         }
 
         private void Calc_Size()
         {
-            _size = MathHelper.Clamp((Strength + Constitution) / 200, 0f, 50f);
+            _size = MathHelper.Clamp((Strength + Constitution) / 2f, 0f, 50f);
         }
 
         private void Calc_Speed()
         {
-            _speed = MathHelper.Clamp((Dexterity - Size) / 100, 5f, 50f);
+            _speed = MathHelper.Clamp((Dexterity - Size), 5f, 50f);
         }
 
         private void Calc_Number_of_Attacks()
@@ -146,34 +146,34 @@ namespace AI_Evolution
 
         private void Calc_PAtk()
         {
-            _pAtk = MathHelper.Clamp((Strength + Dexterity) / 200, 0f, 50f);
+            _pAtk = MathHelper.Clamp((Strength + Dexterity) / 2f, 0f, 50f);
         }
         private void Calc_PDef()
         {
-            _pDef = MathHelper.Clamp((Constitution + Size) / 200, 0f, 50f);
+            _pDef = MathHelper.Clamp((Constitution + Size) / 2f, 0f, 50f);
         }
         private void Calc_HpReg()
         {
-            _hps = MathHelper.Clamp(Constitution / 200, 5f, 50f);
+            _hps = MathHelper.Clamp(Constitution / 2f, 5f, 50f);
         }
         private void Calc_Health()
         {
-            _hp = MathHelper.Clamp((Constitution + Size) / 200, 5f, 50f);
+            _hp = MathHelper.Clamp((Constitution + Size) / 2f, 5f, 50f);
         }
 
         private void Calc_MAtk()
         {
-            _mAtk = MathHelper.Clamp((Intelligence + Faith) / 200, 5f, 50f);
+            _mAtk = MathHelper.Clamp((Intelligence + Faith) / 2f, 5f, 50f);
         }
 
         private void Calc_MDef()
         {
-            _mDef = MathHelper.Clamp((Faith + Wisdom) / 200, 5f, 50f);
+            _mDef = MathHelper.Clamp((Faith + Wisdom) / 2f, 5f, 50f);
         }
 
         private void Calc_Mana()
         {
-            _mp = MathHelper.Clamp((Intelligence + Faith) / 200f, 5f, 50f);
+            _mp = MathHelper.Clamp((Intelligence + Faith) / 2f, 5f, 50f);
         }
         #endregion
 
