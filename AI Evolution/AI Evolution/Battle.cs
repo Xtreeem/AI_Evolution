@@ -19,7 +19,7 @@ namespace AI_Evolution
         private float _turnTimer;
         private Random _rand;
 
-        private const int _baseHitChance = 50;
+        private const int _baseHitChance = 10;
 
         public Battle(ref Actor Hero, Actor Enemy, int RandomSeed)
         {
@@ -30,20 +30,23 @@ namespace AI_Evolution
 
         public void Update(GameTime GT, float TurnLength)
         {
-            if (TurnLength == 0)
+            if (!_finished)
             {
-                do
+                if (TurnLength == 0)
                 {
-                    Start_Combat_Turn();
-                } while (_finished != true);
-            }
-            else
-            {
-                _turnTimer += GT.ElapsedGameTime.Milliseconds;
-                if (_turnTimer > TurnLength)
+                    do
+                    {
+                        Start_Combat_Turn();
+                    } while (_finished != true);
+                }
+                else
                 {
-                    _turnTimer = 0;
-                    Start_Combat_Turn();
+                    _turnTimer += GT.ElapsedGameTime.Milliseconds;
+                    if (_turnTimer > TurnLength)
+                    {
+                        _turnTimer = 0;
+                        Start_Combat_Turn();
+                    }
                 }
             }
         }
@@ -123,7 +126,7 @@ namespace AI_Evolution
                 return;
             T100 = _rand.Next(1, 101);
             if (T100 < Attacker.Stats.Critical_Hit_Chance - Defender.Stats.Resilience)
-                Defender.Take_Damage(MathHelper.Clamp((Attacker.Stats.Physical_Attack * 2) * (1 - (Defender.Stats.Physical_Resist /100)), 0, 100000));
+                Defender.Take_Damage(MathHelper.Clamp((Attacker.Stats.Physical_Attack * 2) * (1 - (Defender.Stats.Physical_Resist / 100)), 0, 100000));
             else
                 Defender.Take_Damage(MathHelper.Clamp(Attacker.Stats.Physical_Attack * (1 - (Defender.Stats.Physical_Resist / 100)), 0, 100000));
         }

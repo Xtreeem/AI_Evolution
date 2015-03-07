@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="Actor.cs" />
     <Compile Include="Battle.cs" />
+    <Compile Include="Enemy.cs" />
     <Compile Include="Hero.cs" />
     <Compile Include="Misc.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

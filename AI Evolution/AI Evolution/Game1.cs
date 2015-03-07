@@ -15,16 +15,20 @@ namespace AI_Evolution
 {
     public class Game1 : Microsoft.Xna.Framework.Game
     {
-        const int _numberOfScenes = 2000;
+        const int _numberOfScenes = 2;
         Scene[] Scenes = new Scene[_numberOfScenes];
         Task[] Tasks = new Task[_numberOfScenes];
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
-        Avatar.Avatar[] _dummies = new Avatar.Avatar[_numberOfScenes];
+        //Avatar.Avatar[] _dummies = new Avatar.Avatar[_numberOfScenes];
         Texture2D[] _dummyTex = new Texture2D[5];
 
+        Actor[] Heroes = new Actor[_numberOfScenes];
+        Actor H1 = new Hero(new Stats(50,40,60,40,50,60,40));
+        Actor H2 = new Hero(new Stats(40,60,50,40,60,50,50));
+        Battle BattleTest;
 
         public Game1()
         {
@@ -35,6 +39,7 @@ namespace AI_Evolution
             graphics.PreferMultiSampling = true;
             graphics.ApplyChanges();
             IsMouseVisible = true;
+            BattleTest = new Battle(ref H1, H2, 1337);
 
 
 
@@ -76,12 +81,17 @@ namespace AI_Evolution
                 _pos.Y = _rand.Next(200, 800);
                 _scale = _rand.Next(10, 20);
                 _scale /= 100;
-                _dummies[i] = new Avatar.Avatar(_pos, _scale, _dummyTex, _rand.Next(1, 1000), 10);
+                //_dummies[i] = new Avatar.Avatar(_pos, _scale, _dummyTex, _rand.Next(1, 1000), 10);
             }
 
+            for (int i = 0; i < Heroes.Length; i++)
+            {
+                Heroes[i] = new Hero(new Stats(Misc.Random.Next(20, 61),Misc.Random.Next(20, 61),Misc.Random.Next(20, 61),Misc.Random.Next(20, 61),Misc.Random.Next(20, 61),Misc.Random.Next(20, 61),Misc.Random.Next(20, 61)));
+            }
+            Actor Enemy = new Hero(new Stats(10, 10, 100, 10, 10, 10, 10));
             for (int i = 0; i < _numberOfScenes; i++)
             {
-                Scenes[i] = new Scene(0);
+                Scenes[i] = new Scene(ref Heroes[i], Enemy);
             }
 
 
@@ -104,10 +114,11 @@ namespace AI_Evolution
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            for (int z = 0; z < _dummies.Length; z++)
+            BattleTest.Update(gameTime, 1);
+            for (int z = 0; z < Scenes.Length; z++)
             {
-                Avatar.Avatar TC = _dummies[z];
-                Tasks[z] = Task.Factory.StartNew(() => TC.Update(ref gameTime));
+                Scene TS = Scenes[z];
+                Tasks[z] = Task.Factory.StartNew(() => TS.Update(gameTime));
             }
             Task.WaitAll(Tasks);
 
@@ -135,10 +146,10 @@ namespace AI_Evolution
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
             spriteBatch.Begin();
-            for (int i = 0; i < _dummies.Length; i++)
-            {
-                _dummies[i].Draw(spriteBatch);
-            }
+            //for (int i = 0; i < _dummies.Length; i++)
+            //{
+            //    _dummies[i].Draw(spriteBatch);
+            //}
             spriteBatch.End();
             // TODO: Add your drawing code here
 

@@ -112,6 +112,7 @@ namespace AI_Evolution
             Calc_PAtk();
             Calc_PDef();
             Calc_Res();
+            Calc_Init();
         }
         #region Sub Stat Functions
         private void Calc_CHC()
@@ -141,7 +142,7 @@ namespace AI_Evolution
 
         private void Calc_Number_of_Attacks()
         {
-            _nAtk = MathHelper.Clamp((_speed) / 10f, 5f, 50f);
+            _nAtk = MathHelper.Clamp((_speed) / 10f, 1f, 50f);
         }
 
         private void Calc_PAtk()
@@ -173,7 +174,11 @@ namespace AI_Evolution
 
         private void Calc_Mana()
         {
-            _mp = MathHelper.Clamp((Intelligence + Faith) / 2f, 5f, 50f);
+            _mp = MathHelper.Clamp((Intelligence + Faith) / 2f, 1f, 50f);
+        }
+        private void Calc_Init()
+        {
+            _mp = MathHelper.Clamp((Speed) / 1.5f, 1f, 50f);
         }
         #endregion
 

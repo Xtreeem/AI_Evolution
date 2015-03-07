@@ -1,34 +1,28 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace AI_Evolution
 {
     class Scene
     {
-        public bool IsTurnDone { get { return _turnDone; } }
-        private bool _turnDone = false;
-
-        public int Counter { get { return _counter; } }
-        private int _counter;
-        public Scene(int Counter)
+        Battle _battle;
+        public Actor Hero { get { return _hero; } }
+        private Actor _hero;
+        private Actor _enemy;
+        public Scene(ref Actor Hero, Actor Enemy)
         {
-            _counter = Counter;
+            _battle = new Battle(ref Hero, Enemy, Misc.Random.Next(1, 100001));
+            _hero = Hero;
+            _enemy = Enemy;
         }
 
-        public void Update()
+        public void Update(GameTime GT)
         {
-            _counter++;
-            _turnDone = true;
+
         }
-
-        public void StartTurn()
-        {
-            _turnDone = false;
-            Update();
-        }
-
-
     }
 }
