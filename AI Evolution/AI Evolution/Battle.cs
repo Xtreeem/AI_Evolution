@@ -104,7 +104,6 @@ namespace AI_Evolution
 
         private void Physical_Attack(ref Actor Attacker, ref Actor Defender)
         {
-            Console.WriteLine("Yolo");
         }
 
         private void Magical_Phase()
