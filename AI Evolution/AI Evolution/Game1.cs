@@ -104,7 +104,6 @@ namespace AI_Evolution
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            InputManager.InputManager.Update();
             for (int z = 0; z < _dummies.Length; z++)
             {
                 Avatar.Avatar TC = _dummies[z];
