@@ -82,6 +82,14 @@ namespace AI_Evolution
             switch (_gameState)
             {
                 case GameState.Breeding:
+                    Console.WriteLine("5 is an even number: " + Misc.IsThisNumberEven(5));
+                    Console.WriteLine("2 is an even number: " + Misc.IsThisNumberEven(2));
+                    Console.WriteLine("4 is an even number: " + Misc.IsThisNumberEven(4));
+                    Console.WriteLine("9 is an even number: " + Misc.IsThisNumberEven(9));
+                    Console.WriteLine("17 is an even number: " + Misc.IsThisNumberEven(17));
+                    Console.WriteLine("19 is an even number: " + Misc.IsThisNumberEven(19));
+
+
                     break;
                 case GameState.Trialing:
                     for (int z = 0; z < _scenes.Length; z++)

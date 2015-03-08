@@ -7,7 +7,7 @@ using System.Text;
 
 namespace AI_Evolution
 {
-    class Actor
+    public class Actor
     {
         public Stats Stats { get { return _stats; } }
         protected Stats _stats;

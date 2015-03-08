@@ -21,6 +21,21 @@ namespace AI_Evolution
             _current_Health = _stats.Health;
         }
 
+        public Hero(StatWeight Weights, float TotalStats)
+        {
+            float statsPerPercent = TotalStats / 100;
+            _stats = new Stats(
+                Weights.STR * statsPerPercent, 
+                Weights.DEX * statsPerPercent, 
+                Weights.CON * statsPerPercent, 
+                Weights.INT * statsPerPercent, 
+                Weights.WIS * statsPerPercent, 
+                Weights.FTH * statsPerPercent, 
+                Weights.PER * statsPerPercent);
+            _current_Health = _stats.Health;
+
+        }
+
 
 
         private void GenerateStats_Breed(Actor P1, Actor P2)

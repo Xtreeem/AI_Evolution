@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace AI_Evolution
 {
-    class Stats
+   public class Stats
     {
         #region Base Stats
         public float Strength { get { return _str; } }

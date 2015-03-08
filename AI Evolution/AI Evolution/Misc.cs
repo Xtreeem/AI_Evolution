@@ -35,6 +35,16 @@ namespace AI_Evolution
         {
             return new Vector2(P.X, P.Y);
         }
+
+        public static bool IsThisNumberEven(float Number)
+        {
+            if (Number % 2 == 0)
+                return true;
+            else
+                return false;
+
+        }
+
     }
 
 
