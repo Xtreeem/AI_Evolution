@@ -21,7 +21,7 @@ namespace AI_Evolution
 
         private const int _baseHitChance = 10;
 
-        public Battle(ref Actor Hero, Actor Enemy, int RandomSeed)
+        public Battle(Actor Hero, Actor Enemy, int RandomSeed)
         {
             _hero = Hero;
             _enemy = Enemy;
@@ -69,7 +69,7 @@ namespace AI_Evolution
         private void Combat_Over()
         {
             _finished = true;
-            _fitnessValue = Math.Abs(_enemy.Current_Health - _enemy.Stats.Health);
+            _fitnessValue = Math.Abs(MathHelper.Clamp(_enemy.Current_Health, 0, _enemy.Stats.Health) - _enemy.Stats.Health);
         }
 
         private void Roll_for_Initiative(out Actor Winner, out Actor Loser)

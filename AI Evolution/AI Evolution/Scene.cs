@@ -15,9 +15,9 @@ namespace AI_Evolution
         private Actor _enemy;
         private Battle _battle;
         
-        public Scene(ref Actor Hero, Actor Enemy)
+        public Scene(Actor Hero, Actor Enemy)
         {
-            _battle = new Battle(ref Hero, Enemy, Misc.Random.Next(1, 100001));
+            _battle = new Battle(Hero, Enemy, Misc.Random.Next(1, 100001));
             _hero = Hero;
             _enemy = Enemy;
         }
