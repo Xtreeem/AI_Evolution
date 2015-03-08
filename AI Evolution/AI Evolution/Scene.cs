@@ -9,10 +9,12 @@ namespace AI_Evolution
 {
     class Scene
     {
-        Battle _battle;
+        public bool IsFinished { get { return _battle.IsFinished; } }
         public Actor Hero { get { return _hero; } }
         private Actor _hero;
         private Actor _enemy;
+        private Battle _battle;
+        
         public Scene(ref Actor Hero, Actor Enemy)
         {
             _battle = new Battle(ref Hero, Enemy, Misc.Random.Next(1, 100001));
@@ -28,7 +30,10 @@ namespace AI_Evolution
                 _battle.Update(GT, TurnLength);
         }
 
-
+        public Tuple<float, Actor> Get_Result()
+        {
+            return new Tuple<float, Actor>(_battle.FitnessValue, _hero);
+        }
 
     }
 }

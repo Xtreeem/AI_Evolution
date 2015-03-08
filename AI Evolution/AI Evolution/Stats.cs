@@ -178,7 +178,7 @@ namespace AI_Evolution
         }
         private void Calc_Init()
         {
-            _mp = MathHelper.Clamp((Speed) / 1.5f, 1f, 50f);
+            _init = MathHelper.Clamp((Speed) / 1.5f, 1f, 50f);
         }
         #endregion
 
