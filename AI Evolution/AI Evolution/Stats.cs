@@ -100,9 +100,9 @@ namespace AI_Evolution
         private void CalculateSubStats()
         {
             Calc_CHC();
-            Calc_Dodge();
             Calc_Size();
             Calc_Speed();
+            Calc_Dodge();
             Calc_Health();
             Calc_HpReg();
             Calc_Mana();
@@ -117,12 +117,12 @@ namespace AI_Evolution
         #region Sub Stat Functions
         private void Calc_CHC()
         {
-            _chc = MathHelper.Clamp(5f + (Dexterity + Intelligence) / 2f, 5f, 50f);
+            _chc = MathHelper.Clamp(((Dexterity + Intelligence) * 0.4f + Perception * 0.25f)/ 2f, 5f, 50f);
         }
 
         private void Calc_Dodge()
         {
-            _dodge = MathHelper.Clamp((Perception * 0.5f + Dexterity * 1.5f) / 2f, 0f, 50f);
+            _dodge = MathHelper.Clamp(((Perception * 0.5f + Dexterity * 1.5f) - Size * 0.5f ) / 2f, 0f, 50f);
         }
 
         private void Calc_Res()
