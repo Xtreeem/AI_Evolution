@@ -21,20 +21,26 @@ namespace AI_Evolution
 
     public class Game1 : Microsoft.Xna.Framework.Game
     {
+        List<List<float>> _averageStats = new List<List<float>>();
+
+
+        int _generation = 0;
         float _turnLength = 1;
-        const int _numberOfScenes = 200000;
+        const int _numberOfScenes = 10;
+        const int _statsPerHero = 200;
         GameState _gameState = GameState.Trialing;
 
         Scene[] _scenes = new Scene[_numberOfScenes];
         Task[] _tasks = new Task[_numberOfScenes];
         List<Tuple<float, Actor>> _results;
+        List<Tuple<float, Actor>> _debug = new List<Tuple<float, Actor>>();
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
         Texture2D[] _dummyTex = new Texture2D[5];
 
-        Actor[] Heroes = new Actor[_numberOfScenes];
+        Actor[] _heroes = new Actor[_numberOfScenes];
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -44,7 +50,25 @@ namespace AI_Evolution
             graphics.PreferMultiSampling = true;
             graphics.ApplyChanges();
             IsMouseVisible = true;
+
+
+
+            int temp;
+            temp = Misc.DivideByTwo(5, true);
+            Console.WriteLine(temp + " : 3");
+            temp = Misc.DivideByTwo(5, false);
+            Console.WriteLine(temp + " : 2");
+            temp = Misc.DivideByTwo(3, true);
+            Console.WriteLine(temp + " : 2");
+            temp = Misc.DivideByTwo(3, false);
+            Console.WriteLine(temp + " : 1");
+            temp = Misc.DivideByTwo(2, true);
+            Console.WriteLine(temp + " : 1");
+            temp = Misc.DivideByTwo(2, false);
+            Console.WriteLine(temp + " : 1");
+
         }
+
 
         protected override void Initialize()
         {
@@ -62,15 +86,22 @@ namespace AI_Evolution
             _dummyTex[3] = Content.Load<Texture2D>("Hand1");
             _dummyTex[4] = Content.Load<Texture2D>("Hand1");
 
-            for (int i = 0; i < Heroes.Length; i++)
+            for (int i = 0; i < _heroes.Length; i++)
             {
-                Heroes[i] = new Hero(new Stats(Misc.Random.Next(20, 61), Misc.Random.Next(20, 61), Misc.Random.Next(20, 61), Misc.Random.Next(20, 61), Misc.Random.Next(20, 61), Misc.Random.Next(20, 61), Misc.Random.Next(20, 61)));
+                _heroes[i] = new Hero(
+                    new StatWeight(
+                        Misc.Random.Next(1, 101),
+                        Misc.Random.Next(1, 101),
+                        Misc.Random.Next(1, 101),
+                        Misc.Random.Next(1, 101),
+                        Misc.Random.Next(1, 101),
+                        Misc.Random.Next(1, 101),
+                        Misc.Random.Next(1, 101)),
+                        _statsPerHero
+                        );
+                _debug.Add(new Tuple<float, Actor>(i * 100, _heroes[i]));
             }
-            for (int i = 0; i < _numberOfScenes; i++)
-            {
-                Actor Enemy = new Hero(new Stats(10, 10, 10000, 10, 10, 10, 10));
-                _scenes[i] = new Scene(Heroes[i], Enemy);
-            }
+            Set_up_Scenes();
         }
 
         protected override void UnloadContent()
@@ -82,14 +113,11 @@ namespace AI_Evolution
             switch (_gameState)
             {
                 case GameState.Breeding:
-                    Console.WriteLine("5 is an even number: " + Misc.IsThisNumberEven(5));
-                    Console.WriteLine("2 is an even number: " + Misc.IsThisNumberEven(2));
-                    Console.WriteLine("4 is an even number: " + Misc.IsThisNumberEven(4));
-                    Console.WriteLine("9 is an even number: " + Misc.IsThisNumberEven(9));
-                    Console.WriteLine("17 is an even number: " + Misc.IsThisNumberEven(17));
-                    Console.WriteLine("19 is an even number: " + Misc.IsThisNumberEven(19));
-
-
+                    Gather_Average_Stats();
+                    if (_generation % 100 == 0)
+                        Debug_print_change(100);
+                    _heroes = Breeder.Breed_Actors(_debug).ToArray<Actor>();
+                    Set_up_Scenes();
                     break;
                 case GameState.Trialing:
                     for (int z = 0; z < _scenes.Length; z++)
@@ -143,9 +171,68 @@ namespace AI_Evolution
                 _results.Add(_scenes[i].Get_Result());
             }
             _results = _results.OrderByDescending(x => x.Item1).ToList();
-            Debug_print_top_5();
-            Debug_print_bottom_5();
+            //Debug_print_top_5();
+            //Debug_print_bottom_5();
         }
+
+        private void Gather_Average_Stats()
+        {
+            List<float> tempList = new List<float>();
+            for (int i = 0; i < 7; i++)
+            {
+                tempList.Add(0);
+            }
+            for (int i = 0; i < _numberOfScenes; i++)
+            {
+                tempList[0] += _heroes[i].Stats.Strength        / 1;
+                tempList[1] += _heroes[i].Stats.Constitution    / 1;
+                tempList[2] += _heroes[i].Stats.Dexterity       / 1;
+                tempList[3] += _heroes[i].Stats.Intelligence    / 1;
+                tempList[4] += _heroes[i].Stats.Wisdom          / 1;
+                tempList[5] += _heroes[i].Stats.Faith           / 1;
+                tempList[6] += _heroes[i].Stats.Perception      / 1;
+            }
+            for (int i = 0; i < tempList.Count; i++)
+            {
+                tempList[i] /= _statsPerHero;
+            }
+            _averageStats.Add(tempList);
+        }
+
+        private void Set_up_Scenes()
+        {
+            _generation++;
+            if (_heroes.Count() != _numberOfScenes)
+                throw (new Exception("SOmethings wrong"));
+            for (int i = 0; i < _numberOfScenes; i++)
+            {
+                Actor Enemy = new Hero(new Stats(10, 10, 10000, 10, 10, 10, 10));
+                _scenes[i] = new Scene(_heroes[i], Enemy);
+            }
+            _gameState = GameState.Trialing;
+            if (_generation % 100 == 0)
+                Console.WriteLine("Trialing Generation: " + _generation);
+        }
+
+        private void Debug_print_change(int GenerationsBack)
+        {
+            float cCON = _averageStats[_generation - 1][1] - _averageStats[_generation - GenerationsBack][1];
+            float cSTR = _averageStats[_generation - 1][0] - _averageStats[_generation - GenerationsBack][0];
+            float cDEX = _averageStats[_generation - 1][2] - _averageStats[_generation - GenerationsBack][2];
+            float cINT = _averageStats[_generation - 1][3] - _averageStats[_generation - GenerationsBack][3];
+            float cWIS = _averageStats[_generation - 1][4] - _averageStats[_generation - GenerationsBack][4];
+            float cFTH = _averageStats[_generation - 1][5] - _averageStats[_generation - GenerationsBack][5];
+            float cPER = _averageStats[_generation - 1][6] - _averageStats[_generation - GenerationsBack][6];
+
+            Console.WriteLine("Change In STR: " + cSTR);
+            Console.WriteLine("Change In CON: " + cCON);
+            Console.WriteLine("Change In DEX: " + cDEX);
+            Console.WriteLine("Change In INT: " + cINT);
+            Console.WriteLine("Change In WIS: " + cWIS);
+            Console.WriteLine("Change In FTH: " + cFTH);
+            Console.WriteLine("Change In PER: " + cPER);
+        }
+
         private void Debug_print_top_5()
         {
             Actor TH;

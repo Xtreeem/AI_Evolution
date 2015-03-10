@@ -25,13 +25,24 @@ namespace AI_Evolution
         {
             float statsPerPercent = TotalStats / 100;
             _stats = new Stats(
-                Weights.STR * statsPerPercent, 
-                Weights.DEX * statsPerPercent, 
-                Weights.CON * statsPerPercent, 
-                Weights.INT * statsPerPercent, 
-                Weights.WIS * statsPerPercent, 
-                Weights.FTH * statsPerPercent, 
+                Weights.STR * statsPerPercent,
+                Weights.DEX * statsPerPercent,
+                Weights.CON * statsPerPercent,
+                Weights.INT * statsPerPercent,
+                Weights.WIS * statsPerPercent,
+                Weights.FTH * statsPerPercent,
                 Weights.PER * statsPerPercent);
+
+            float T =
+                Stats.Strength +
+            Stats.Constitution +
+            Stats.Dexterity +
+            Stats.Intelligence +
+            Stats.Wisdom +
+            Stats.Faith +
+            Stats.Perception;
+            //if (T != 200)
+                //Console.WriteLine("");
             _current_Health = _stats.Health;
 
         }

@@ -16,13 +16,31 @@ namespace AI_Evolution
         public float FTH;
         public float PER;
 
-        public float[] Weights ;
+        public float[] Weights;
 
         public StatWeight(float Str, float Con, float Dex, float Int, float Wis, float Fth, float Per)
         {
             Weights = new float[7];
-            STR = Str; CON = Con; DEX = Dex; INT = Int; WIS = Wis; FTH = Fth; PER = Per;
-            Weights[0] = STR; Weights[0] = CON; Weights[0] = DEX; Weights[0] = INT; Weights[0] = WIS; Weights[0] = FTH; Weights[0] = PER;
+
+            float totalStat =
+                Str +
+    Con +
+    Dex +
+    Int +
+    Wis +
+    Fth +
+    Per;
+
+            float statPerPercent = totalStat / 100;
+            STR = Str / statPerPercent;
+            CON = Con / statPerPercent;
+            DEX = Dex / statPerPercent;
+            INT = Int / statPerPercent;
+            WIS = Wis / statPerPercent;
+            FTH = Fth / statPerPercent;
+            PER = Per / statPerPercent;
+
+            Weights[0] = STR; Weights[1] = CON; Weights[2] = DEX; Weights[3] = INT; Weights[4] = WIS; Weights[5] = FTH; Weights[6] = PER;
         }
 
         public StatWeight(Actor A)
@@ -47,7 +65,7 @@ namespace AI_Evolution
             FTH = A.Stats.Faith / statPerPercent;
             PER = A.Stats.Perception / statPerPercent;
 
-            Weights[0] = STR; Weights[0] = CON; Weights[0] = DEX; Weights[0] = INT; Weights[0] = WIS; Weights[0] = FTH; Weights[0] = PER;
+            Weights[0] = STR; Weights[1] = CON; Weights[2] = DEX; Weights[3] = INT; Weights[4] = WIS; Weights[5] = FTH; Weights[6] = PER;
         }
     }
 
@@ -55,18 +73,28 @@ namespace AI_Evolution
     {
         public static List<Actor> Breed_Actors(List<Tuple<float, Actor>> Stock)
         {
+            Actor[] debug = new Actor[2];
+            List<Actor> tResult = new List<Actor>();
             List<Actor> result = Dispose_of_Bottomhalf(Stock);
-
-            
-
-
-
+            for (int i = 0; i + 1 < Misc.DivideByTwo(Stock.Count, true); i += 2)
+            {
+                debug = (Breed(result[i], result[i + 1]));
+                result.Add(debug[0]);
+                if (result.Count != Stock.Count)
+                    result.Add(debug[1]);
+            }
+            if (result.Count != Stock.Count)            ///NEEEDS WORK , NOT WORKING 
+            {
+                debug = Breed(result[Misc.DivideByTwo(Stock.Count, true) - 1], result[Misc.DivideByTwo(Stock.Count, true) - 1]);
+                result.Add(debug[0]);
+            }
             return result;
         }
+
         private static List<Actor> Dispose_of_Bottomhalf(List<Tuple<float, Actor>> Stock)
         {
             List<Actor> result = new List<Actor>();
-            for (int i = 0; i < Stock.Count / 2; i++)
+            for (int i = 0; i < Misc.DivideByTwo(Stock.Count, true); i++)
             {
                 result.Add(Stock[i].Item2);
             }
@@ -100,11 +128,8 @@ namespace AI_Evolution
             StatWeight CW1 = new StatWeight(C1[0], C1[1], C1[2], C1[3], C1[4], C1[5], C1[6]);
             StatWeight CW2 = new StatWeight(C2[0], C2[1], C2[2], C2[3], C2[4], C2[5], C2[6]);
 
-            result[0] = new Hero(CW1, 300f);
-            result[0] = new Hero(CW2, 300f);
-
-
-
+            result[0] = new Hero(CW1, 200f);
+            result[1] = new Hero(CW2, 200f);
 
             return result;
         }

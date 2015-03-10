@@ -42,7 +42,27 @@ namespace AI_Evolution
                 return true;
             else
                 return false;
+        }
 
+        public static int DivideByTwo(float Input, bool Rounding_Up)
+        {
+            int result = new int();
+            float temp = Input;
+            if (Rounding_Up)
+            {
+                    result = (int)(temp / 2);
+                if (temp % 2 != 0)
+                {
+                    result += 1;
+                }
+
+            }
+            else
+            {
+                temp = Input / 2;
+                result = (int)temp;
+            }
+            return result;
         }
 
     }
