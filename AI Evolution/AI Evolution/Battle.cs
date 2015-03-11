@@ -137,21 +137,24 @@ namespace AI_Evolution
         private void Physical_Attack(ref Actor Attacker, ref Actor Defender)
         {
             float T100 = _rand.Next(1, 101);
-            //T100 -= Defender.Stats.Dodge_Chance;
-            //if (T100 < _baseHitChance)
-            //return;
-            //T100 = _rand.Next(1, 101);
+            T100 -= Defender.Stats.Dodge_Chance;
+            if (T100 < _baseHitChance)
+            {
+                _log.AddEntry(_turnCounter, AttackType.Magical, Attacker, Defender, 0, false);
+                return;
+            }
+            T100 = _rand.Next(1, 101);
             if (T100 < Attacker.Stats.Critical_Hit_Chance - Defender.Stats.Resilience)
             {
                 _log.AddEntry(_turnCounter, AttackType.Physical, Attacker, Defender, MathHelper.Clamp(((Attacker.Stats.Physical_Attack * 2) * (1 - Defender.Stats.Physical_Resist / 100)) * (1 - (Defender.Stats.Dodge_Chance / 100)), 0, 100000), true);
-                //Defender.Take_Damage(MathHelper.Clamp((Attacker.Stats.Physical_Attack * 2) * (1 - (Defender.Stats.Physical_Resist / 100)), 0, 100000));
-                Defender.Take_Damage(MathHelper.Clamp(((Attacker.Stats.Physical_Attack * 2) * (1 - Defender.Stats.Physical_Resist / 100)) * (1 - (Defender.Stats.Dodge_Chance / 100)), 0, 100000));
+                Defender.Take_Damage(MathHelper.Clamp((Attacker.Stats.Physical_Attack * 2) * (1 - (Defender.Stats.Physical_Resist / 100)), 0, 100000));
+                //Defender.Take_Damage(MathHelper.Clamp(((Attacker.Stats.Physical_Attack * 2) * (1 - Defender.Stats.Physical_Resist / 100)) * (1 - (Defender.Stats.Dodge_Chance / 100)), 0, 100000));
             }
             else
             {
                 _log.AddEntry(_turnCounter, AttackType.Physical, Attacker, Defender, MathHelper.Clamp(((Attacker.Stats.Physical_Attack * 1) * (1 - Defender.Stats.Physical_Resist / 100)) * (1 - (Defender.Stats.Dodge_Chance / 100)), 0, 100000), true);
-                //Defender.Take_Damage(MathHelper.Clamp((Attacker.Stats.Physical_Attack * 1) * (1 - (Defender.Stats.Physical_Resist / 100)), 0, 100000));
-                Defender.Take_Damage(MathHelper.Clamp((Attacker.Stats.Physical_Attack * (1 - Defender.Stats.Physical_Resist / 100)) * (1 - (Defender.Stats.Dodge_Chance / 100)), 0, 100000));
+                Defender.Take_Damage(MathHelper.Clamp((Attacker.Stats.Physical_Attack * 1) * (1 - (Defender.Stats.Physical_Resist / 100)), 0, 100000));
+                //Defender.Take_Damage(MathHelper.Clamp((Attacker.Stats.Physical_Attack * (1 - Defender.Stats.Physical_Resist / 100)) * (1 - (Defender.Stats.Dodge_Chance / 100)), 0, 100000));
             }
         }
 
@@ -183,21 +186,24 @@ namespace AI_Evolution
         private void Magical_Attack(ref Actor Attacker, ref Actor Defender)
         {
             float T100 = _rand.Next(1, 101);
-            //T100 -= Defender.Stats.Dodge_Chance;
-            //if (T100 < _baseHitChance)
-            //return;
-            //T100 = _rand.Next(1, 101);
+            T100 -= Defender.Stats.Dodge_Chance;
+            if (T100 < _baseHitChance)
+            {
+                _log.AddEntry(_turnCounter, AttackType.Magical, Attacker, Defender, 0, false);
+                return;
+            }
+            T100 = _rand.Next(1, 101);
             if (T100 < Attacker.Stats.Critical_Hit_Chance - Defender.Stats.Resilience)
             {
-                _log.AddEntry(_turnCounter, AttackType.Physical, Attacker, Defender, MathHelper.Clamp(((Attacker.Stats.Magic_Attack * 2) * (1 - Defender.Stats.Magic_Resist / 100)) * (1 - (Defender.Stats.Dodge_Chance / 100)), 0, 100000), true);
-                Defender.Take_Damage(MathHelper.Clamp(((Attacker.Stats.Magic_Attack * 2) * (1 - Defender.Stats.Magic_Resist / 100)) * (1 - (Defender.Stats.Dodge_Chance / 100)), 0, 100000));
-                //Defender.Take_Damage(MathHelper.Clamp((Attacker.Stats.Magic_Attack * 2) * (1 - (Defender.Stats.Magic_Resist / 100)), 0, 100000));
+                _log.AddEntry(_turnCounter, AttackType.Magical, Attacker, Defender, MathHelper.Clamp(((Attacker.Stats.Magic_Attack * 2) * (1 - Defender.Stats.Magic_Resist / 100)) * (1 - (Defender.Stats.Dodge_Chance / 100)), 0, 100000), true);
+                //Defender.Take_Damage(MathHelper.Clamp(((Attacker.Stats.Magic_Attack * 2) * (1 - Defender.Stats.Magic_Resist / 100)) * (1 - (Defender.Stats.Dodge_Chance / 100)), 0, 100000));
+                Defender.Take_Damage(MathHelper.Clamp((Attacker.Stats.Magic_Attack * 2) * (1 - (Defender.Stats.Magic_Resist / 100)), 0, 100000));
             }
             else
             {
-                _log.AddEntry(_turnCounter, AttackType.Physical, Attacker, Defender, MathHelper.Clamp(((Attacker.Stats.Magic_Attack * 1) * (1 - Defender.Stats.Magic_Resist / 100)) * (1 - (Defender.Stats.Dodge_Chance / 100)), 0, 100000), true);
-                Defender.Take_Damage(MathHelper.Clamp(((Attacker.Stats.Magic_Attack * 1) * (1 - Defender.Stats.Magic_Resist / 100)) * (1 - (Defender.Stats.Dodge_Chance / 100)), 0, 100000));
-                //Defender.Take_Damage(MathHelper.Clamp(Attacker.Stats.Magic_Attack * (1 - (Defender.Stats.Magic_Resist / 100)), 0, 100000));
+                _log.AddEntry(_turnCounter, AttackType.Magical, Attacker, Defender, MathHelper.Clamp(((Attacker.Stats.Magic_Attack * 1) * (1 - Defender.Stats.Magic_Resist / 100)) * (1 - (Defender.Stats.Dodge_Chance / 100)), 0, 100000), true);
+                //Defender.Take_Damage(MathHelper.Clamp(((Attacker.Stats.Magic_Attack * 1) * (1 - Defender.Stats.Magic_Resist / 100)) * (1 - (Defender.Stats.Dodge_Chance / 100)), 0, 100000));
+                Defender.Take_Damage(MathHelper.Clamp(Attacker.Stats.Magic_Attack * (1 - (Defender.Stats.Magic_Resist / 100)), 0, 100000));
             }
         }
 

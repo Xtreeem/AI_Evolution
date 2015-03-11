@@ -132,8 +132,8 @@ namespace AI_Evolution
             {
                 case GameState.Breeding:
                     Gather_Average_Stats();
-                    if (_generation % 1 == 0)
-                        Debug_print_change(1);
+                    if (_generation % 1000 == 0)
+                        Debug_print_change(1000);
                     Write_to_File();
                     _heroes = Breeder.Breed_Actors(_results).ToArray<Actor>();
                     Set_up_Scenes();
@@ -190,7 +190,7 @@ namespace AI_Evolution
                 _results.Add(_scenes[i].Get_Result(_debugFitness));
             }
             _results = _results.OrderByDescending(x => x.Item1).ToList();
-            if (_generation % 1 == 0)
+            if (_generation % 1000 == 0)
             {
                 Debug_print_top_5();
                 Debug_print_bottom_5();
