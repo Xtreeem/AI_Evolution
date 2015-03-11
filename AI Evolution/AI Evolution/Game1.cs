@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using System.Threading;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace AI_Evolution
 {
@@ -131,8 +132,9 @@ namespace AI_Evolution
             {
                 case GameState.Breeding:
                     Gather_Average_Stats();
-                    if (_generation % 1== 0)
+                    if (_generation % 1 == 0)
                         Debug_print_change(1);
+                    Write_to_File();
                     _heroes = Breeder.Breed_Actors(_results).ToArray<Actor>();
                     Set_up_Scenes();
                     break;
@@ -236,17 +238,49 @@ namespace AI_Evolution
                 Console.WriteLine("Trialing Generation: " + _generation);
         }
 
+        private void Write_to_File()
+        {
+            Actor bH = _heroes[0];
+            Actor wH = _heroes[_numberOfScenes - 1];
+            StreamWriter sW = new StreamWriter(@"BestHero.txt", true);
+
+            sW.WriteLine("\n" + _generation + ":\t" + bH.Stats.Strength + "\t" + bH.Stats.Constitution + "\t" + bH.Stats.Dexterity + "\t" + bH.Stats.Intelligence + "\t" + bH.Stats.Wisdom + "\t" + bH.Stats.Faith + "\t" + bH.Stats.Perception + "\t");
+            sW.Close();
+            sW = new StreamWriter(@"WorstHero.txt", true);
+            sW.WriteLine("\n"+_generation + ":\t" + wH.Stats.Strength + "\t" + wH.Stats.Constitution + "\t" + wH.Stats.Dexterity + "\t" + wH.Stats.Intelligence + "\t" + wH.Stats.Wisdom + "\t" + wH.Stats.Faith + "\t" + wH.Stats.Perception + "\t");
+            sW.Close();
+            sW = new StreamWriter(@"AverageStat.txt", true);
+            sW.WriteLine("\n" + _generation + "\t" + _averageStats[_generation - 1][0] + "\t" + _averageStats[_generation - 1][1] + "\t" + _averageStats[_generation - 1][2] + "\t" + _averageStats[_generation - 1][3] + "\t" + _averageStats[_generation - 1][4] + "\t" + _averageStats[_generation - 1][5] + "\t" + _averageStats[_generation - 1][6]);
+            sW.Close();
+            sW = new StreamWriter(@"Change.txt", true);
+            if (_generation != 1)
+            sW.WriteLine(
+                "\n" + _generation + ":\t" +
+                    (_averageStats[_generation - 1][0] - _averageStats[_generation - 2][0]) + "\t" +
+                    (_averageStats[_generation - 1][1] - _averageStats[_generation - 2][1]) + "\t" +
+                    (_averageStats[_generation - 1][2] - _averageStats[_generation - 2][2]) + "\t" +
+                    (_averageStats[_generation - 1][3] - _averageStats[_generation - 2][3]) + "\t" +
+                    (_averageStats[_generation - 1][4] - _averageStats[_generation - 2][4]) + "\t" +
+                    (_averageStats[_generation - 1][5] - _averageStats[_generation - 2][5]) + "\t" +
+                    (_averageStats[_generation - 1][6] - _averageStats[_generation - 2][6]) + "\t"
+                    );
+            else
+                sW.WriteLine("\n" + _generation + ":\t" +0 + "\t" + 0 + "\t" + 0 + "\t" + 0 + "\t" + 0 + "\t" + 0 + "\t" + 0);
+            sW.Close();
+        }
+
+
         private void Debug_print_change(int GenerationsBack)
         {
             if ((_generation - 1) - GenerationsBack < 0)
                 return;
-            float cSTR = _averageStats[_generation - 1][0] - _averageStats[(_generation - 1)- GenerationsBack][0];
-            float cCON = _averageStats[_generation - 1][1] - _averageStats[(_generation - 1)- GenerationsBack][1];
-            float cDEX = _averageStats[_generation - 1][2] - _averageStats[(_generation - 1)- GenerationsBack][2];
-            float cINT = _averageStats[_generation - 1][3] - _averageStats[(_generation - 1)- GenerationsBack][3];
-            float cWIS = _averageStats[_generation - 1][4] - _averageStats[(_generation - 1)- GenerationsBack][4];
-            float cFTH = _averageStats[_generation - 1][5] - _averageStats[(_generation - 1)- GenerationsBack][5];
-            float cPER = _averageStats[_generation - 1][6] - _averageStats[(_generation - 1)- GenerationsBack][6];
+            float cSTR = _averageStats[_generation - 1][0] - _averageStats[(_generation - 1) - GenerationsBack][0];
+            float cCON = _averageStats[_generation - 1][1] - _averageStats[(_generation - 1) - GenerationsBack][1];
+            float cDEX = _averageStats[_generation - 1][2] - _averageStats[(_generation - 1) - GenerationsBack][2];
+            float cINT = _averageStats[_generation - 1][3] - _averageStats[(_generation - 1) - GenerationsBack][3];
+            float cWIS = _averageStats[_generation - 1][4] - _averageStats[(_generation - 1) - GenerationsBack][4];
+            float cFTH = _averageStats[_generation - 1][5] - _averageStats[(_generation - 1) - GenerationsBack][5];
+            float cPER = _averageStats[_generation - 1][6] - _averageStats[(_generation - 1) - GenerationsBack][6];
 
             Console.WriteLine("Change In STR: " + cSTR);
             Console.WriteLine("Change In CON: " + cCON);
@@ -264,7 +298,7 @@ namespace AI_Evolution
             {
                 TH = _results[i].Item2;
                 Console.WriteLine("--------------------------------------------------------------------");
-                Console.WriteLine("Generation: "+ _generation + "\tFitness: " + _results[i].Item1 + "\tRanking: " + (i + 1));
+                Console.WriteLine("Generation: " + _generation + "\tFitness: " + _results[i].Item1 + "\tRanking: " + (i + 1));
                 Console.WriteLine("--------------------------------------------------------------------");
                 Debug_Write_Actor_Stats(TH);
                 Console.WriteLine("--------------------------------------------------------------------");
@@ -277,7 +311,7 @@ namespace AI_Evolution
             {
                 TH = _results[i].Item2;
                 Console.WriteLine("--------------------------------------------------------------------");
-                Console.WriteLine("Generation: "+ _generation + "\tFitness: " + _results[i].Item1 + "\tRanking: " + (i + 1) + "\n");
+                Console.WriteLine("Generation: " + _generation + "\tFitness: " + _results[i].Item1 + "\tRanking: " + (i + 1) + "\n");
                 Console.WriteLine("--------------------------------------------------------------------");
                 Debug_Write_Actor_Stats(TH);
                 Console.WriteLine("--------------------------------------------------------------------");
@@ -307,5 +341,6 @@ namespace AI_Evolution
             Console.WriteLine("Size: " + TH.Stats.Size);
             Console.WriteLine("Speed: " + TH.Stats.Speed);
         }
+
     }
 }
