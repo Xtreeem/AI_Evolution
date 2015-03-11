@@ -14,10 +14,14 @@ namespace AI_Evolution
         public float FitnessValue { get { return _fitnessValue; } }
         private float _fitnessValue;
 
+        public float DebugFitness { get { return _hero.Stats.Strength + _hero.Stats.Constitution; } }
+
         private Actor _hero, _enemy;
         private float _heroHealthAtTurnStart, _enemyHealthAtTurnStart;
         private float _turnTimer;
         private Random _rand;
+        private int _turnCounter = 1;
+        private CombatLog _log = new CombatLog();
 
         private const int _baseHitChance = 10;
 
@@ -26,6 +30,10 @@ namespace AI_Evolution
             _hero = Hero;
             _enemy = Enemy;
             _rand = new Random(RandomSeed);
+            _hero.Full_Recovery();
+            _enemy.Full_Recovery();
+            if (_hero.Current_Health != _hero.Stats.Health)
+                Console.Write("");
         }
 
         public void Update(GameTime GT, float TurnLength)
@@ -59,17 +67,25 @@ namespace AI_Evolution
             Actor inititiveLoser;
             Roll_for_Initiative(out inititiveWinner, out inititiveLoser);
             if (Physical_Phase(ref inititiveWinner, ref inititiveLoser))
-            { Combat_Over(); return; }
+            {
+                Combat_Over(); return;
+            }
             Roll_for_Initiative(out inititiveWinner, out inititiveLoser);
             if (Magical_Phase(ref inititiveWinner, ref inititiveLoser))
-            { Combat_Over(); return; }
+            {
+                Combat_Over(); return;
+            }
             Recovery_Phase();
+            _turnCounter++;
         }
 
         private void Combat_Over()
         {
             _finished = true;
-            _fitnessValue = Math.Abs(MathHelper.Clamp(_enemy.Current_Health, 0, _enemy.Stats.Health) - _enemy.Stats.Health);
+            //_fitnessValue = Math.Abs(MathHelper.Clamp(_enemy.Current_Health, 0, _enemy.Stats.Health) - _enemy.Stats.Health);
+            _fitnessValue = Math.Abs(_enemy.Current_Health - _enemy.Stats.Health);
+            if (_fitnessValue == 0)
+                Console.Write("");
         }
 
         private void Roll_for_Initiative(out Actor Winner, out Actor Loser)
@@ -121,14 +137,22 @@ namespace AI_Evolution
         private void Physical_Attack(ref Actor Attacker, ref Actor Defender)
         {
             float T100 = _rand.Next(1, 101);
-            T100 -= Defender.Stats.Dodge_Chance;
-            if (T100 < _baseHitChance)
-                return;
-            T100 = _rand.Next(1, 101);
+            //T100 -= Defender.Stats.Dodge_Chance;
+            //if (T100 < _baseHitChance)
+            //return;
+            //T100 = _rand.Next(1, 101);
             if (T100 < Attacker.Stats.Critical_Hit_Chance - Defender.Stats.Resilience)
-                Defender.Take_Damage(MathHelper.Clamp((Attacker.Stats.Physical_Attack * 2) * (1 - (Defender.Stats.Physical_Resist / 100)), 0, 100000));
+            {
+                _log.AddEntry(_turnCounter, AttackType.Physical, Attacker, Defender, MathHelper.Clamp(((Attacker.Stats.Physical_Attack * 2) * (1 - Defender.Stats.Physical_Resist / 100)) * (1 - (Defender.Stats.Dodge_Chance / 100)), 0, 100000), true);
+                //Defender.Take_Damage(MathHelper.Clamp((Attacker.Stats.Physical_Attack * 2) * (1 - (Defender.Stats.Physical_Resist / 100)), 0, 100000));
+                Defender.Take_Damage(MathHelper.Clamp(((Attacker.Stats.Physical_Attack * 2) * (1 - Defender.Stats.Physical_Resist / 100)) * (1 - (Defender.Stats.Dodge_Chance / 100)), 0, 100000));
+            }
             else
-                Defender.Take_Damage(MathHelper.Clamp(Attacker.Stats.Physical_Attack * (1 - (Defender.Stats.Physical_Resist / 100)), 0, 100000));
+            {
+                _log.AddEntry(_turnCounter, AttackType.Physical, Attacker, Defender, MathHelper.Clamp(((Attacker.Stats.Physical_Attack * 1) * (1 - Defender.Stats.Physical_Resist / 100)) * (1 - (Defender.Stats.Dodge_Chance / 100)), 0, 100000), true);
+                //Defender.Take_Damage(MathHelper.Clamp((Attacker.Stats.Physical_Attack * 1) * (1 - (Defender.Stats.Physical_Resist / 100)), 0, 100000));
+                Defender.Take_Damage(MathHelper.Clamp((Attacker.Stats.Physical_Attack * (1 - Defender.Stats.Physical_Resist / 100)) * (1 - (Defender.Stats.Dodge_Chance / 100)), 0, 100000));
+            }
         }
 
         private bool Magical_Phase(ref Actor A1, ref Actor A2)
@@ -159,14 +183,22 @@ namespace AI_Evolution
         private void Magical_Attack(ref Actor Attacker, ref Actor Defender)
         {
             float T100 = _rand.Next(1, 101);
-            T100 -= Defender.Stats.Dodge_Chance;
-            if (T100 < _baseHitChance)
-                return;
-            T100 = _rand.Next(1, 101);
+            //T100 -= Defender.Stats.Dodge_Chance;
+            //if (T100 < _baseHitChance)
+            //return;
+            //T100 = _rand.Next(1, 101);
             if (T100 < Attacker.Stats.Critical_Hit_Chance - Defender.Stats.Resilience)
-                Defender.Take_Damage(MathHelper.Clamp((Attacker.Stats.Magic_Attack * 2) * (1 - (Defender.Stats.Magic_Resist / 100)), 0, 100000));
+            {
+                _log.AddEntry(_turnCounter, AttackType.Physical, Attacker, Defender, MathHelper.Clamp(((Attacker.Stats.Magic_Attack * 2) * (1 - Defender.Stats.Magic_Resist / 100)) * (1 - (Defender.Stats.Dodge_Chance / 100)), 0, 100000), true);
+                Defender.Take_Damage(MathHelper.Clamp(((Attacker.Stats.Magic_Attack * 2) * (1 - Defender.Stats.Magic_Resist / 100)) * (1 - (Defender.Stats.Dodge_Chance / 100)), 0, 100000));
+                //Defender.Take_Damage(MathHelper.Clamp((Attacker.Stats.Magic_Attack * 2) * (1 - (Defender.Stats.Magic_Resist / 100)), 0, 100000));
+            }
             else
-                Defender.Take_Damage(MathHelper.Clamp(Attacker.Stats.Magic_Attack * (1 - (Defender.Stats.Magic_Resist / 100)), 0, 100000));
+            {
+                _log.AddEntry(_turnCounter, AttackType.Physical, Attacker, Defender, MathHelper.Clamp(((Attacker.Stats.Magic_Attack * 1) * (1 - Defender.Stats.Magic_Resist / 100)) * (1 - (Defender.Stats.Dodge_Chance / 100)), 0, 100000), true);
+                Defender.Take_Damage(MathHelper.Clamp(((Attacker.Stats.Magic_Attack * 1) * (1 - Defender.Stats.Magic_Resist / 100)) * (1 - (Defender.Stats.Dodge_Chance / 100)), 0, 100000));
+                //Defender.Take_Damage(MathHelper.Clamp(Attacker.Stats.Magic_Attack * (1 - (Defender.Stats.Magic_Resist / 100)), 0, 100000));
+            }
         }
 
         private void Recovery_Phase()
@@ -174,9 +206,13 @@ namespace AI_Evolution
             float DamageTaken;
             DamageTaken = _heroHealthAtTurnStart - _hero.Current_Health;
             _hero.Heal(DamageTaken * (_hero.Stats.Health_Regen / 100));
+            _log.AddEntry(_turnCounter, AttackType.Heal, _hero, _hero, DamageTaken * (_hero.Stats.Health_Regen / 100), true);
 
             DamageTaken = _enemyHealthAtTurnStart - _enemy.Current_Health;
+            if (DamageTaken == 0)
+                Console.Write("");
             _enemy.Heal(DamageTaken * (_enemy.Stats.Health_Regen / 100));
+            _log.AddEntry(_turnCounter, AttackType.Heal, _enemy, _enemy, DamageTaken * (_hero.Stats.Health_Regen / 100), true);
         }
 
         private bool Death_Check(ref Actor A)

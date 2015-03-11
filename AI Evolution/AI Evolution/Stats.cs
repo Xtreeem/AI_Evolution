@@ -159,7 +159,7 @@ namespace AI_Evolution
         }
         private void Calc_Health()
         {
-            _hp = MathHelper.Clamp((Constitution + Size) / 2f, 5f, 50f);
+            _hp = MathHelper.Clamp((Constitution + Size) * 2f, 5f, 5000f);
         }
 
         private void Calc_MAtk()
@@ -174,7 +174,7 @@ namespace AI_Evolution
 
         private void Calc_Mana()
         {
-            _mp = MathHelper.Clamp((Intelligence + Faith) / 2f, 1f, 50f);
+            _mp = MathHelper.Clamp((Intelligence + Faith) / 20f, 1f, 5f);
         }
         private void Calc_Init()
         {

@@ -14,7 +14,7 @@ namespace AI_Evolution
         private Actor _hero;
         private Actor _enemy;
         private Battle _battle;
-        
+
         public Scene(Actor Hero, Actor Enemy)
         {
             _battle = new Battle(Hero, Enemy, Misc.Random.Next(1, 100001));
@@ -30,9 +30,12 @@ namespace AI_Evolution
                 _battle.Update(GT, TurnLength);
         }
 
-        public Tuple<float, Actor> Get_Result()
+        public Tuple<float, Actor> Get_Result(bool Debug)
         {
+            if(Debug == false)
             return new Tuple<float, Actor>(_battle.FitnessValue, _hero);
+            else
+                return new Tuple<float, Actor>(_battle.DebugFitness, _hero);
         }
 
     }

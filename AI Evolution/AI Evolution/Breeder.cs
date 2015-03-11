@@ -6,6 +6,7 @@ using System.Text;
 
 namespace AI_Evolution
 {
+
     public struct StatWeight
     {
         public float STR;
@@ -67,10 +68,45 @@ namespace AI_Evolution
 
             Weights[0] = STR; Weights[1] = CON; Weights[2] = DEX; Weights[3] = INT; Weights[4] = WIS; Weights[5] = FTH; Weights[6] = PER;
         }
+
+        public void Mutate(float Amount)
+        {
+            int decider = Misc.Random.Next(1, 8);
+            switch (decider)
+            {
+                case (1):
+                    STR *= Amount;
+                    break;
+                case (2):
+                    CON *= Amount;
+                    break;
+                case (3):
+                    DEX *= Amount;
+                    break;
+                case (4):
+                    INT *= Amount;
+                    break;
+                case (5):
+                    WIS *= Amount;
+                    break;
+                case (6):
+                    FTH *= Amount;
+                    break;
+                case (7):
+                    PER *= Amount;
+                    break;
+                default:
+                    throw (new Exception("FUCK IT ALL"));
+            }
+        }
+
     }
 
     public static class Breeder
     {
+        const bool _mutationEnabled = true;
+        const float _mutationPercent = 50f;
+        const int _mutationMagnitude = 5;
         public static List<Actor> Breed_Actors(List<Tuple<float, Actor>> Stock)
         {
             Actor[] debug = new Actor[2];
@@ -83,7 +119,7 @@ namespace AI_Evolution
                 if (result.Count != Stock.Count)
                     result.Add(debug[1]);
             }
-            if (result.Count != Stock.Count)            ///NEEEDS WORK , NOT WORKING 
+            if (result.Count != Stock.Count)
             {
                 debug = Breed(result[Misc.DivideByTwo(Stock.Count, true) - 1], result[Misc.DivideByTwo(Stock.Count, true) - 1]);
                 result.Add(debug[0]);
@@ -128,12 +164,35 @@ namespace AI_Evolution
             StatWeight CW1 = new StatWeight(C1[0], C1[1], C1[2], C1[3], C1[4], C1[5], C1[6]);
             StatWeight CW2 = new StatWeight(C2[0], C2[1], C2[2], C2[3], C2[4], C2[5], C2[6]);
 
+            if (_mutationEnabled)
+            {
+                Mutation_Check(CW1);
+                Mutation_Check(CW2);
+
+            }
+
             result[0] = new Hero(CW1, 200f);
             result[1] = new Hero(CW2, 200f);
 
             return result;
         }
 
+        private static void Mutation_Check(StatWeight SW)
+        {
+            ///MUTATION
+            int t100 = Misc.Random.Next(0, 101);
+            if (t100 <= _mutationPercent)
+            {
+                float tMagnitude = Misc.Random.Next(1, _mutationMagnitude + 1);
+                tMagnitude /= 100;
+                if (Misc.TrueOrFalse())
+                    tMagnitude += 1;
+                else
+                    tMagnitude = Math.Abs(tMagnitude -1);
+                SW.Mutate(tMagnitude);
+            }
+            ///END OF MUTATION
 
+        }
     }
 }

@@ -25,9 +25,10 @@ namespace AI_Evolution
 
 
         int _generation = 0;
-        float _turnLength = 1;
-        const int _numberOfScenes = 10;
+        float _turnLength = 0;
+        const int _numberOfScenes = 100;
         const int _statsPerHero = 200;
+        const bool _debugFitness = false;
         GameState _gameState = GameState.Trialing;
 
         Scene[] _scenes = new Scene[_numberOfScenes];
@@ -41,6 +42,16 @@ namespace AI_Evolution
         Texture2D[] _dummyTex = new Texture2D[5];
 
         Actor[] _heroes = new Actor[_numberOfScenes];
+
+
+
+
+
+
+        Scene Tscene;
+        Hero Thero;
+        Hero Tenemy;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -72,6 +83,12 @@ namespace AI_Evolution
 
         protected override void Initialize()
         {
+            Thero = new Hero(new Stats(13.72998f, 22.42563f, 41.6476f, 39.35927f, 32.03661f, 46.93593f, 6.864989f));
+            Tenemy = new Hero(new Stats(10, 10, 10000, 10, 10, 10, 10));
+            Tscene = new Scene(Thero, Tenemy);
+            Tscene.Update(new GameTime(), 0);
+
+
             base.Initialize();
         }
 
@@ -116,7 +133,7 @@ namespace AI_Evolution
                     Gather_Average_Stats();
                     if (_generation % 100 == 0)
                         Debug_print_change(100);
-                    _heroes = Breeder.Breed_Actors(_debug).ToArray<Actor>();
+                    _heroes = Breeder.Breed_Actors(_results).ToArray<Actor>();
                     Set_up_Scenes();
                     break;
                 case GameState.Trialing:
@@ -168,11 +185,14 @@ namespace AI_Evolution
             _results = new List<Tuple<float, Actor>>(_numberOfScenes);
             for (int i = 0; i < _numberOfScenes; i++)
             {
-                _results.Add(_scenes[i].Get_Result());
+                _results.Add(_scenes[i].Get_Result(_debugFitness));
             }
             _results = _results.OrderByDescending(x => x.Item1).ToList();
-            //Debug_print_top_5();
-            //Debug_print_bottom_5();
+            if (_generation % 1000 == 0)
+            {
+                Debug_print_top_5();
+                Debug_print_bottom_5();
+            }
         }
 
         private void Gather_Average_Stats()
@@ -184,17 +204,17 @@ namespace AI_Evolution
             }
             for (int i = 0; i < _numberOfScenes; i++)
             {
-                tempList[0] += _heroes[i].Stats.Strength        / 1;
-                tempList[1] += _heroes[i].Stats.Constitution    / 1;
-                tempList[2] += _heroes[i].Stats.Dexterity       / 1;
-                tempList[3] += _heroes[i].Stats.Intelligence    / 1;
-                tempList[4] += _heroes[i].Stats.Wisdom          / 1;
-                tempList[5] += _heroes[i].Stats.Faith           / 1;
-                tempList[6] += _heroes[i].Stats.Perception      / 1;
+                tempList[0] += _heroes[i].Stats.Strength;
+                tempList[1] += _heroes[i].Stats.Constitution;
+                tempList[2] += _heroes[i].Stats.Dexterity;
+                tempList[3] += _heroes[i].Stats.Intelligence;
+                tempList[4] += _heroes[i].Stats.Wisdom;
+                tempList[5] += _heroes[i].Stats.Faith;
+                tempList[6] += _heroes[i].Stats.Perception;
             }
             for (int i = 0; i < tempList.Count; i++)
             {
-                tempList[i] /= _statsPerHero;
+                tempList[i] /= _heroes.Count();
             }
             _averageStats.Add(tempList);
         }

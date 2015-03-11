@@ -33,8 +33,18 @@ namespace AI_Evolution
             _avatar.Update(ref GT);
         }
 
+        public void Full_Recovery()
+        {
+            _current_Health = Stats.Health;
+            _alive = true;
+        }
+
         public void Take_Damage(float Amount)
         {
+            if (Amount < 1)
+                Console.Write("");
+
+
             _current_Health -= Amount;
             if (_current_Health <= 0)
                 _alive = false;
