@@ -147,7 +147,7 @@ namespace AI_Evolution
 
         private void Calc_PAtk()
         {
-            _pAtk = MathHelper.Clamp((Strength + Dexterity) / 2f, 0f, 50f);
+            _pAtk = MathHelper.Clamp((Strength * 1.25f + Size * 0.75f) / 2f, 0f, 50f);
         }
         private void Calc_PDef()
         {
