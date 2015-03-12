@@ -91,12 +91,6 @@ namespace AI_Evolution
             CalculateSubStats();
         }
 
-        public void Mutate()
-        {
-            //Mutate logic 
-            CalculateSubStats();
-        }
-
         private void CalculateSubStats()
         {
             Calc_CHC();
@@ -147,7 +141,7 @@ namespace AI_Evolution
 
         private void Calc_PAtk()
         {
-            _pAtk = MathHelper.Clamp((Strength * 2f + Dexterity * 0.5f) / 2f, 0f, 50f);
+            _pAtk = MathHelper.Clamp((Strength * 2f + Dexterity * 0.5f) / 2f, 0f, 5000f);
         }
         private void Calc_PDef()
         {
