@@ -108,6 +108,7 @@ namespace AI_Evolution
         private void Set_up_Excel()
         {
             _myEApp = new Excel.Application();
+            _myEApp.Visible = true;
             _myEBook = _myEApp.Workbooks.Add(_mValue);
             _myESheet1 = (Excel.Worksheet)_myEBook.Worksheets.get_Item(1);
             _myESheet2 = (Excel.Worksheet)_myEBook.Worksheets.Add(_mValue, _mValue, 1, _mValue);
@@ -147,7 +148,7 @@ namespace AI_Evolution
             _myESheet4.Cells[1, 7] = "Per";
             _myEBook.SaveAs(string.Format(@"Results_{0}.xls", DateTime.Now.ToString("h_mm_ss")), Excel.XlFileFormat.xlWorkbookNormal, _mValue, _mValue, _mValue, _mValue, Excel.XlSaveAsAccessMode.xlExclusive, _mValue, _mValue, _mValue, _mValue, _mValue);
             _myEBook.Close(true, _mValue, _mValue);
-            _myEApp.Quit();
+            //_myEApp.Quit();
         }
 
         protected override void LoadContent()
@@ -357,7 +358,6 @@ namespace AI_Evolution
                 _myESheet4.Cells[lineNumber, 8] = 0;
             }
             #endregion
-
         }
         //private void Write_to_File()
         //{
