@@ -122,12 +122,12 @@ namespace AI_Evolution
 
         private void Calc_Dodge()
         {
-            _dodge = MathHelper.Clamp(((Perception + Dexterity) - Size * 0.5f) / 2f, 0f, 50f);
+            _dodge = MathHelper.Clamp(((Perception * 1.5f + Dexterity * 0.5f) - Size * 0.5f) / 2f, 0f, 50f);
         }
 
         private void Calc_Res()
         {
-            _res = MathHelper.Clamp((Wisdom * 1.5f + Dexterity * 0.5f) / 2f, 0f, 50f);
+            _res = MathHelper.Clamp((Wisdom * 1.5f + Dexterity * 0.5f) / 4f, 0f, 50f);
         }
 
         private void Calc_Size()
@@ -151,7 +151,7 @@ namespace AI_Evolution
         }
         private void Calc_PDef()
         {
-            _pDef = MathHelper.Clamp((Constitution + Size) / 2f, 0f, 50f);
+            _pDef = MathHelper.Clamp((Speed + Size) / 2f, 0f, 50f);
         }
         private void Calc_HpReg()
         {
@@ -164,7 +164,7 @@ namespace AI_Evolution
 
         private void Calc_MAtk()
         {
-            _mAtk = MathHelper.Clamp((Intelligence * 1.5f + Faith * 0.5f) / 2f, 5f, 50f);
+            _mAtk = MathHelper.Clamp((Intelligence * 1.5f + Faith * 0.5f), 5f, 100f);
         }
 
         private void Calc_MDef()
@@ -174,7 +174,7 @@ namespace AI_Evolution
 
         private void Calc_Mana()
         {
-            _mp = MathHelper.Clamp((Wisdom) / 10f, 1f, 5f);
+            _mp = MathHelper.Clamp((Wisdom * 1.5f) / 10f, 1f, 5f);
         }
         private void Calc_Init()
         {
