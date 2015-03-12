@@ -31,7 +31,7 @@ namespace AI_Evolution
         Excel.Workbooks _myEBooks;
         Excel.Workbook _myEBook;
         Excel.Application _myEApp;
-        Excel.Worksheet _myESheet1,_myESheet2,_myESheet3,_myESheet4;
+        Excel.Worksheet _myESheetBestHero,_myESheetWorstHero,_myESheetAverageStat,_myESheetChange;
 
 
         List<List<float>> _averageStats = new List<List<float>>();
@@ -110,44 +110,47 @@ namespace AI_Evolution
             _myEApp = new Excel.Application();
             _myEApp.Visible = true;
             _myEBook = _myEApp.Workbooks.Add(_mValue);
-            _myESheet1 = (Excel.Worksheet)_myEBook.Worksheets.get_Item(1);
-            _myESheet2 = (Excel.Worksheet)_myEBook.Worksheets.Add(_mValue, _mValue, 1, _mValue);
-            _myESheet3 = (Excel.Worksheet)_myEBook.Worksheets.Add(_mValue, _mValue, 1, _mValue);
-            _myESheet4 = (Excel.Worksheet)_myEBook.Worksheets.Add(_mValue, _mValue, 1, _mValue);
-            _myESheet1.Cells[1, 1] = "Str";
-            _myESheet1.Cells[1, 2] = "Con";
-            _myESheet1.Cells[1, 3] = "Dex";
-            _myESheet1.Cells[1, 4] = "Int";
-            _myESheet1.Cells[1, 5] = "Wis";
-            _myESheet1.Cells[1, 6] = "Fth";
-            _myESheet1.Cells[1, 7] = "Per";
+            _myESheetBestHero = (Excel.Worksheet)_myEBook.Worksheets.get_Item(1);
+            _myESheetWorstHero = (Excel.Worksheet)_myEBook.Worksheets.Add(_mValue, _mValue, 1, _mValue);
+            _myESheetAverageStat = (Excel.Worksheet)_myEBook.Worksheets.Add(_mValue, _mValue, 1, _mValue);
+            _myESheetChange = (Excel.Worksheet)_myEBook.Worksheets.Add(_mValue, _mValue, 1, _mValue);
+            _myESheetBestHero.Name = "Best Hero";
+            _myESheetBestHero.Cells[1, 2] = "Str";
+            _myESheetBestHero.Cells[1, 3] = "Con";
+            _myESheetBestHero.Cells[1, 4] = "Dex";
+            _myESheetBestHero.Cells[1, 5] = "Int";
+            _myESheetBestHero.Cells[1, 6] = "Wis";
+            _myESheetBestHero.Cells[1,7] = "Fth";
+            _myESheetBestHero.Cells[1, 8] = "Per";
 
-            _myESheet2.Cells[1, 1] = "Str";
-            _myESheet2.Cells[1, 2] = "Con";
-            _myESheet2.Cells[1, 3] = "Dex";
-            _myESheet2.Cells[1, 4] = "Int";
-            _myESheet2.Cells[1, 5] = "Wis";
-            _myESheet2.Cells[1, 6] = "Fth";
-            _myESheet2.Cells[1, 7] = "Per";
+            _myESheetWorstHero.Name = "Worst Hero";
+            _myESheetWorstHero.Cells[1, 2] = "Str";
+            _myESheetWorstHero.Cells[1, 3] = "Con";
+            _myESheetWorstHero.Cells[1, 4] = "Dex";
+            _myESheetWorstHero.Cells[1, 5] = "Int";
+            _myESheetWorstHero.Cells[1, 6] = "Wis";
+            _myESheetWorstHero.Cells[1, 7] = "Fth";
+            _myESheetWorstHero.Cells[1, 8] = "Per";
 
+            _myESheetAverageStat.Name = "Average Stats";
+            _myESheetAverageStat.Cells[1, 2] = "Str";
+            _myESheetAverageStat.Cells[1, 3] = "Con";
+            _myESheetAverageStat.Cells[1, 4] = "Dex";
+            _myESheetAverageStat.Cells[1, 5] = "Int";
+            _myESheetAverageStat.Cells[1, 6] = "Wis";
+            _myESheetAverageStat.Cells[1, 7] = "Fth";
+            _myESheetAverageStat.Cells[1, 8] = "Per";
 
-            _myESheet3.Cells[1, 1] = "Str";
-            _myESheet3.Cells[1, 2] = "Con";
-            _myESheet3.Cells[1, 3] = "Dex";
-            _myESheet3.Cells[1, 4] = "Int";
-            _myESheet3.Cells[1, 5] = "Wis";
-            _myESheet3.Cells[1, 6] = "Fth";
-            _myESheet3.Cells[1, 7] = "Per";
-
-            _myESheet4.Cells[1, 1] = "Str";
-            _myESheet4.Cells[1, 2] = "Con";
-            _myESheet4.Cells[1, 3] = "Dex";
-            _myESheet4.Cells[1, 4] = "Int";
-            _myESheet4.Cells[1, 5] = "Wis";
-            _myESheet4.Cells[1, 6] = "Fth";
-            _myESheet4.Cells[1, 7] = "Per";
+            _myESheetChange.Name = "Stat Changes";
+            _myESheetChange.Cells[1, 2] = "Str";
+            _myESheetChange.Cells[1, 3] = "Con";
+            _myESheetChange.Cells[1, 4] = "Dex";
+            _myESheetChange.Cells[1, 5] = "Int";
+            _myESheetChange.Cells[1, 6] = "Wis";
+            _myESheetChange.Cells[1, 7] = "Fth";
+            _myESheetChange.Cells[1, 8] = "Per";
             _myEBook.SaveAs(string.Format(@"Results_{0}.xls", DateTime.Now.ToString("h_mm_ss")), Excel.XlFileFormat.xlWorkbookNormal, _mValue, _mValue, _mValue, _mValue, Excel.XlSaveAsAccessMode.xlExclusive, _mValue, _mValue, _mValue, _mValue, _mValue);
-            _myEBook.Close(true, _mValue, _mValue);
+            //_myEBook.Close(true, _mValue, _mValue);
             //_myEApp.Quit();
         }
 
@@ -297,65 +300,70 @@ namespace AI_Evolution
         }
         private void Write_to_File()
         {
+            if (_myEApp == null)
+            {
+                Console.Write("") ; //set breakpoint here during execution to see if it IS null
+            }
+
             int lineNumber = _generation +1;
             Actor bH = _heroes[0];
             Actor wH = _heroes[_numberOfScenes - 1];
             #region Best Hero
-            _myESheet1.Cells[lineNumber, 1] = _generation;
-            _myESheet1.Cells[lineNumber, 2] = bH.Stats.Strength;
-            _myESheet1.Cells[lineNumber, 3] = bH.Stats.Constitution;
-            _myESheet1.Cells[lineNumber, 4] = bH.Stats.Dexterity;
-            _myESheet1.Cells[lineNumber, 5] = bH.Stats.Intelligence;
-            _myESheet1.Cells[lineNumber, 6] = bH.Stats.Wisdom;
-            _myESheet1.Cells[lineNumber, 7] = bH.Stats.Faith;
-            _myESheet1.Cells[lineNumber, 8] = bH.Stats.Perception;
+            _myESheetBestHero.Cells[lineNumber, 1] = _generation;
+            _myESheetBestHero.Cells[lineNumber, 2] = bH.Stats.Strength;
+            _myESheetBestHero.Cells[lineNumber, 3] = bH.Stats.Constitution;
+            _myESheetBestHero.Cells[lineNumber, 4] = bH.Stats.Dexterity;
+            _myESheetBestHero.Cells[lineNumber, 5] = bH.Stats.Intelligence;
+            _myESheetBestHero.Cells[lineNumber, 6] = bH.Stats.Wisdom;
+            _myESheetBestHero.Cells[lineNumber, 7] = bH.Stats.Faith;
+            _myESheetBestHero.Cells[lineNumber, 8] = bH.Stats.Perception;
             #endregion
 
             #region Worst Hero
-            _myESheet2.Cells[lineNumber, 1] = _generation + ":";
-            _myESheet2.Cells[lineNumber, 2] = wH.Stats.Strength;
-            _myESheet2.Cells[lineNumber, 3] = wH.Stats.Constitution;
-            _myESheet2.Cells[lineNumber, 4] = wH.Stats.Dexterity;
-            _myESheet2.Cells[lineNumber, 5] = wH.Stats.Intelligence;
-            _myESheet2.Cells[lineNumber, 6] = wH.Stats.Wisdom;
-            _myESheet2.Cells[lineNumber, 7] = wH.Stats.Faith;
-            _myESheet2.Cells[lineNumber, 8] = wH.Stats.Perception;
+            _myESheetWorstHero.Cells[lineNumber, 1] = _generation + ":";
+            _myESheetWorstHero.Cells[lineNumber, 2] = wH.Stats.Strength;
+            _myESheetWorstHero.Cells[lineNumber, 3] = wH.Stats.Constitution;
+            _myESheetWorstHero.Cells[lineNumber, 4] = wH.Stats.Dexterity;
+            _myESheetWorstHero.Cells[lineNumber, 5] = wH.Stats.Intelligence;
+            _myESheetWorstHero.Cells[lineNumber, 6] = wH.Stats.Wisdom;
+            _myESheetWorstHero.Cells[lineNumber, 7] = wH.Stats.Faith;
+            _myESheetWorstHero.Cells[lineNumber, 8] = wH.Stats.Perception;
             #endregion
 
             #region Average Stats
-            _myESheet3.Cells[lineNumber, 1] = _generation + ":";
-            _myESheet3.Cells[lineNumber, 2] = _averageStats[_generation - 1][0];
-            _myESheet3.Cells[lineNumber, 3] = _averageStats[_generation - 1][1];
-            _myESheet3.Cells[lineNumber, 4] = _averageStats[_generation - 1][2];
-            _myESheet3.Cells[lineNumber, 5] = _averageStats[_generation - 1][3];
-            _myESheet3.Cells[lineNumber, 6] = _averageStats[_generation - 1][4];
-            _myESheet3.Cells[lineNumber, 7] = _averageStats[_generation - 1][5];
-            _myESheet3.Cells[lineNumber, 8] = _averageStats[_generation - 1][6];
+            _myESheetAverageStat.Cells[lineNumber, 1] = _generation + ":";
+            _myESheetAverageStat.Cells[lineNumber, 2] = _averageStats[_generation - 1][0];
+            _myESheetAverageStat.Cells[lineNumber, 3] = _averageStats[_generation - 1][1];
+            _myESheetAverageStat.Cells[lineNumber, 4] = _averageStats[_generation - 1][2];
+            _myESheetAverageStat.Cells[lineNumber, 5] = _averageStats[_generation - 1][3];
+            _myESheetAverageStat.Cells[lineNumber, 6] = _averageStats[_generation - 1][4];
+            _myESheetAverageStat.Cells[lineNumber, 7] = _averageStats[_generation - 1][5];
+            _myESheetAverageStat.Cells[lineNumber, 8] = _averageStats[_generation - 1][6];
             #endregion
 
             #region Change in Stats
             if (_generation != 1)
             {
-                _myESheet4.Cells[lineNumber, 1] = _generation + ":";
-                _myESheet4.Cells[lineNumber, 2] = _averageStats[_generation - 1][0] - _averageStats[_generation - 2][0];
-                _myESheet4.Cells[lineNumber, 3] = _averageStats[_generation - 1][1] - _averageStats[_generation - 2][1];
-                _myESheet4.Cells[lineNumber, 4] = _averageStats[_generation - 1][2] - _averageStats[_generation - 2][2];
-                _myESheet4.Cells[lineNumber, 5] = _averageStats[_generation - 1][3] - _averageStats[_generation - 2][3];
-                _myESheet4.Cells[lineNumber, 6] = _averageStats[_generation - 1][4] - _averageStats[_generation - 2][4];
-                _myESheet4.Cells[lineNumber, 7] = _averageStats[_generation - 1][5] - _averageStats[_generation - 2][5];
-                _myESheet4.Cells[lineNumber, 8] = _averageStats[_generation - 1][6] - _averageStats[_generation - 2][6];
+                _myESheetChange.Cells[lineNumber, 1] = _generation + ":";
+                _myESheetChange.Cells[lineNumber, 2] = _averageStats[_generation - 1][0] - _averageStats[_generation - 2][0];
+                _myESheetChange.Cells[lineNumber, 3] = _averageStats[_generation - 1][1] - _averageStats[_generation - 2][1];
+                _myESheetChange.Cells[lineNumber, 4] = _averageStats[_generation - 1][2] - _averageStats[_generation - 2][2];
+                _myESheetChange.Cells[lineNumber, 5] = _averageStats[_generation - 1][3] - _averageStats[_generation - 2][3];
+                _myESheetChange.Cells[lineNumber, 6] = _averageStats[_generation - 1][4] - _averageStats[_generation - 2][4];
+                _myESheetChange.Cells[lineNumber, 7] = _averageStats[_generation - 1][5] - _averageStats[_generation - 2][5];
+                _myESheetChange.Cells[lineNumber, 8] = _averageStats[_generation - 1][6] - _averageStats[_generation - 2][6];
 
             }
             else
             {
-                _myESheet4.Cells[lineNumber, 1] = _generation + ":";
-                _myESheet4.Cells[lineNumber, 2] = 0;
-                _myESheet4.Cells[lineNumber, 3] = 0;
-                _myESheet4.Cells[lineNumber, 4] = 0;
-                _myESheet4.Cells[lineNumber, 5] = 0;
-                _myESheet4.Cells[lineNumber, 6] = 0;
-                _myESheet4.Cells[lineNumber, 7] = 0;
-                _myESheet4.Cells[lineNumber, 8] = 0;
+                _myESheetChange.Cells[lineNumber, 1] = _generation + ":";
+                _myESheetChange.Cells[lineNumber, 2] = 0;
+                _myESheetChange.Cells[lineNumber, 3] = 0;
+                _myESheetChange.Cells[lineNumber, 4] = 0;
+                _myESheetChange.Cells[lineNumber, 5] = 0;
+                _myESheetChange.Cells[lineNumber, 6] = 0;
+                _myESheetChange.Cells[lineNumber, 7] = 0;
+                _myESheetChange.Cells[lineNumber, 8] = 0;
             }
             #endregion
         }
