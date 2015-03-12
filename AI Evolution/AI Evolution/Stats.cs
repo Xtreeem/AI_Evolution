@@ -79,6 +79,7 @@ namespace AI_Evolution
 
         #endregion
 
+        const int SoftCapStep = 10;
         public Stats(float STR, float DEX, float CON, float INT, float WIS, float FTH, float PER)
         {
             _str = STR;
@@ -176,6 +177,26 @@ namespace AI_Evolution
         }
         #endregion
 
+        private float SoftCap(float Input)
+        {
+            float result = 0f;
+            int temp = (int)(Input * 100000);
+            for (int i = 0; i < Input; i++)
+            {
+                if (result < SoftCapStep && result > SoftCapStep * 2) { result += 1; }
+                else if (result < SoftCapStep * 2 && result > SoftCapStep * 3) { result += 1 * 0.9f; }
+                else if (result < SoftCapStep * 3 && result > SoftCapStep * 4) { result += 1 * 0.8f; }
+                else if (result < SoftCapStep * 4 && result > SoftCapStep * 5) { result += 1 * 0.7f; }
+                else if (result < SoftCapStep * 5 && result > SoftCapStep * 6) { result += 1 * 0.6f; }
+                else if (result < SoftCapStep * 6 && result > SoftCapStep * 7) { result += 1 * 0.5f; }
+                else if (result < SoftCapStep * 7 && result > SoftCapStep * 8) { result += 1 * 0.4f; }
+                else if (result < SoftCapStep * 8 && result > SoftCapStep * 9) { result += 1 * 0.3f; }
+                else if (result < SoftCapStep * 9 && result > SoftCapStep * 10) { result += 1 * 0.2f; }
+                else { result += 1 * 0.1f; }
+            }
+            result /= 100000;
+            return result;
+        }
 
 
 
