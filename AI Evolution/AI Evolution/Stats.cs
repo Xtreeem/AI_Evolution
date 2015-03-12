@@ -117,7 +117,7 @@ namespace AI_Evolution
         #region Sub Stat Functions
         private void Calc_CHC()
         {
-            _chc = MathHelper.Clamp(((Dexterity + Intelligence) * 0.4f + Perception * 0.25f) / 2f, 5f, 50f);
+            _chc = MathHelper.Clamp(((Dexterity + Intelligence) * 0.25f + Perception * 0.5f) / 2f, 5f, 50f);
         }
 
         private void Calc_Dodge()
@@ -132,7 +132,7 @@ namespace AI_Evolution
 
         private void Calc_Size()
         {
-            _size = MathHelper.Clamp((Strength + Constitution) / 2f, 0f, 50f);
+            _size = MathHelper.Clamp((Strength * 0.75f + Constitution * 0.25f), 0f, 50f);
         }
 
         private void Calc_Speed()
@@ -147,7 +147,7 @@ namespace AI_Evolution
 
         private void Calc_PAtk()
         {
-            _pAtk = MathHelper.Clamp((Strength * 2f + Dexterity * 0.5f + Size * 0.25f) / 3f, 0f, 50f);
+            _pAtk = MathHelper.Clamp((Strength * 2f + Dexterity * 0.5f) / 2f, 0f, 50f);
         }
         private void Calc_PDef()
         {
@@ -164,7 +164,7 @@ namespace AI_Evolution
 
         private void Calc_MAtk()
         {
-            _mAtk = MathHelper.Clamp((Intelligence * 1.5f + Faith * 0.5f) / 1.5f, 5f, 50f);
+            _mAtk = MathHelper.Clamp((Intelligence * 1.5f + Faith * 0.5f) / 2f, 5f, 50f);
         }
 
         private void Calc_MDef()
