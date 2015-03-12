@@ -116,6 +116,7 @@ namespace AI_Evolution
             _myESheetChange = (Excel.Worksheet)_myEBook.Worksheets.Add(_mValue, _mValue, 1, _mValue);
 
             _myESheetBestHero.Name = "Best Hero";
+            _myESheetBestHero.Cells[1, 1] = "Gen";
             _myESheetBestHero.Cells[1, 2] = "Str";
             _myESheetBestHero.Cells[1, 3] = "Con";
             _myESheetBestHero.Cells[1, 4] = "Dex";
@@ -125,6 +126,7 @@ namespace AI_Evolution
             _myESheetBestHero.Cells[1, 8] = "Per";
 
             _myESheetWorstHero.Name = "Worst Hero";
+            _myESheetWorstHero.Cells[1, 1] = "Gen";
             _myESheetWorstHero.Cells[1, 2] = "Str";
             _myESheetWorstHero.Cells[1, 3] = "Con";
             _myESheetWorstHero.Cells[1, 4] = "Dex";
@@ -134,6 +136,7 @@ namespace AI_Evolution
             _myESheetWorstHero.Cells[1, 8] = "Per";
 
             _myESheetAverageStat.Name = "Average Stats";
+            _myESheetAverageStat.Cells[1, 1] = "Gen";
             _myESheetAverageStat.Cells[1, 2] = "Str";
             _myESheetAverageStat.Cells[1, 3] = "Con";
             _myESheetAverageStat.Cells[1, 4] = "Dex";
@@ -143,6 +146,7 @@ namespace AI_Evolution
             _myESheetAverageStat.Cells[1, 8] = "Per";
 
             _myESheetChange.Name = "Stat Changes";
+            _myESheetChange.Cells[1, 1] = "Gen";
             _myESheetChange.Cells[1, 2] = "Str";
             _myESheetChange.Cells[1, 3] = "Con";
             _myESheetChange.Cells[1, 4] = "Dex";
@@ -150,9 +154,6 @@ namespace AI_Evolution
             _myESheetChange.Cells[1, 6] = "Wis";
             _myESheetChange.Cells[1, 7] = "Fth";
             _myESheetChange.Cells[1, 8] = "Per";
-            _myEBook.SaveAs(string.Format(@"Results_{0}.xls", DateTime.Now.ToString("h_mm_ss")), Excel.XlFileFormat.xlWorkbookNormal, _mValue, _mValue, _mValue, _mValue, Excel.XlSaveAsAccessMode.xlExclusive, _mValue, _mValue, _mValue, _mValue, _mValue);
-            //_myEBook.Close(true, _mValue, _mValue);
-            //_myEApp.Quit();
         }
 
         protected override void LoadContent()
