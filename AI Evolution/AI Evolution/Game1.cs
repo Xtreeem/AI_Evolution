@@ -293,7 +293,7 @@ namespace AI_Evolution
                 throw (new Exception("SOmethings wrong"));
             for (int i = 0; i < _numberOfScenes; i++)
             {
-                Actor Enemy = new Hero(new Stats(500, 10, 10000, 10, 10, 10, 10));
+                Actor Enemy = new Hero(new Stats(30, 40, 10000, 30, 20, 40, 30));
                 _scenes[i] = new Scene(_heroes[i], Enemy);
             }
             _gameState = GameState.Trialing;

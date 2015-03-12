@@ -79,7 +79,8 @@ namespace AI_Evolution
 
         #endregion
 
-        const int SoftCapStep = 10;
+        const int _softCapStep = 5;
+        const float _softCapMagnitude = 0.02f;
         public Stats(float STR, float DEX, float CON, float INT, float WIS, float FTH, float PER)
         {
             _str = STR;
@@ -90,6 +91,7 @@ namespace AI_Evolution
             _fth = FTH;
             _per = PER;
             CalculateSubStats();
+            SoftCap(42.1489f);
         }
 
         private void CalculateSubStats()
@@ -112,27 +114,27 @@ namespace AI_Evolution
         #region Sub Stat Functions
         private void Calc_CHC()
         {
-            _chc = MathHelper.Clamp(((Dexterity + Intelligence) * 0.25f + Perception * 0.5f) / 2f, 5f, 50f);
+            _chc = MathHelper.Clamp(((SoftCap(Dexterity) + SoftCap(Intelligence)) * 0.25f + Perception * 0.5f) / 2f, 5f, 50f);
         }
 
         private void Calc_Dodge()
         {
-            _dodge = MathHelper.Clamp(((Perception + Dexterity) - Size * 0.25f) / 2f, 0f, 50f);
+            _dodge = MathHelper.Clamp(((SoftCap(Perception) + SoftCap(Dexterity)) - Size * 0.25f) / 2f, 0f, 50f);
         }
 
         private void Calc_Res()
         {
-            _res = MathHelper.Clamp((Wisdom * 1.5f + Dexterity * 0.5f) / 4f, 0f, 50f);
+            _res = MathHelper.Clamp((SoftCap(Wisdom) * 1.5f + SoftCap(Dexterity) * 0.5f) / 4f, 0f, 50f);
         }
 
         private void Calc_Size()
         {
-            _size = MathHelper.Clamp((Strength * 0.75f + Constitution * 0.25f), 0f, 50f);
+            _size = MathHelper.Clamp((SoftCap(Strength) * 0.75f + SoftCap(Constitution) * 0.25f), 0f, 50f);
         }
 
         private void Calc_Speed()
         {
-            _speed = MathHelper.Clamp((Dexterity - Size), 5f, 50f);
+            _speed = MathHelper.Clamp((SoftCap(Dexterity) - Size), 5f, 50f);
         }
 
         private void Calc_Number_of_Attacks()
@@ -142,7 +144,7 @@ namespace AI_Evolution
 
         private void Calc_PAtk()
         {
-            _pAtk = MathHelper.Clamp((Strength * 2f + Dexterity * 0.5f) / 2f, 0f, 5000f);
+            _pAtk = MathHelper.Clamp((SoftCap(Strength) * 2f + SoftCap(Dexterity) * 0.5f) / 2f, 0f, 5000f);
         }
         private void Calc_PDef()
         {
@@ -150,26 +152,26 @@ namespace AI_Evolution
         }
         private void Calc_HpReg()
         {
-            _hps = MathHelper.Clamp(Constitution / 4f, 5f, 50f);
+            _hps = MathHelper.Clamp(SoftCap(Constitution) / 4f, 5f, 50f);
         }
         private void Calc_Health()
         {
-            _hp = MathHelper.Clamp((Constitution + Size) * 2f, 5f, 5000f);
+            _hp = MathHelper.Clamp((SoftCap(Constitution) + Size) * 2f, 5f, 5000f);
         }
 
         private void Calc_MAtk()
         {
-            _mAtk = MathHelper.Clamp((Intelligence * 1.5f + Faith * 0.5f) / 2f, 5f, 50f);
+            _mAtk = MathHelper.Clamp((SoftCap(Intelligence) * 1.5f + SoftCap(Faith) * 0.5f) / 2f, 5f, 50f);
         }
 
         private void Calc_MDef()
         {
-            _mDef = MathHelper.Clamp((Faith * 0.75f + Wisdom * 1.25f) / 2f, 5f, 50f);
+            _mDef = MathHelper.Clamp((SoftCap(Faith) * 0.75f + SoftCap(Wisdom) * 1.25f) / 2f, 5f, 50f);
         }
 
         private void Calc_Mana()
         {
-            _mp = MathHelper.Clamp((Wisdom * 1.5f) / 10f, 1f, 5f);
+            _mp = MathHelper.Clamp((SoftCap(Wisdom) * 1.5f) / 10f, 1f, 5f);
         }
         private void Calc_Init()
         {
@@ -177,27 +179,53 @@ namespace AI_Evolution
         }
         #endregion
 
+        //private float SoftCap(float Input)
+        //{
+        //    float result = 0f;
+        //    int temp = (int)(Input * 100000);
+        //    for (int i = 0; i < Input; i++)
+        //    {
+        //        if (result < _softCapStep && result > _softCapStep * 2) { result += 1; }
+        //        else if (result < _softCapStep * 2 && result > _softCapStep * 3) { result += 1 * 0.9f; }
+        //        else if (result < _softCapStep * 3 && result > _softCapStep * 4) { result += 1 * 0.8f; }
+        //        else if (result < _softCapStep * 4 && result > _softCapStep * 5) { result += 1 * 0.7f; }
+        //        else if (result < _softCapStep * 5 && result > _softCapStep * 6) { result += 1 * 0.6f; }
+        //        else if (result < _softCapStep * 6 && result > _softCapStep * 7) { result += 1 * 0.5f; }
+        //        else if (result < _softCapStep * 7 && result > _softCapStep * 8) { result += 1 * 0.4f; }
+        //        else if (result < _softCapStep * 8 && result > _softCapStep * 9) { result += 1 * 0.3f; }
+        //        else if (result < _softCapStep * 9 && result > _softCapStep * 10) { result += 1 * 0.2f; }
+        //        else { result += 1 * 0.1f; }
+        //    }
+        //    result /= 100000;
+        //    return result;
+        //}
+
         private float SoftCap(float Input)
         {
-            float result = 0f;
-            int temp = (int)(Input * 100000);
-            for (int i = 0; i < Input; i++)
+            float Value = 1;
+            float Result = 0;
+            float Remainder = Input;
+            do
             {
-                if (result < SoftCapStep && result > SoftCapStep * 2) { result += 1; }
-                else if (result < SoftCapStep * 2 && result > SoftCapStep * 3) { result += 1 * 0.9f; }
-                else if (result < SoftCapStep * 3 && result > SoftCapStep * 4) { result += 1 * 0.8f; }
-                else if (result < SoftCapStep * 4 && result > SoftCapStep * 5) { result += 1 * 0.7f; }
-                else if (result < SoftCapStep * 5 && result > SoftCapStep * 6) { result += 1 * 0.6f; }
-                else if (result < SoftCapStep * 6 && result > SoftCapStep * 7) { result += 1 * 0.5f; }
-                else if (result < SoftCapStep * 7 && result > SoftCapStep * 8) { result += 1 * 0.4f; }
-                else if (result < SoftCapStep * 8 && result > SoftCapStep * 9) { result += 1 * 0.3f; }
-                else if (result < SoftCapStep * 9 && result > SoftCapStep * 10) { result += 1 * 0.2f; }
-                else { result += 1 * 0.1f; }
-            }
-            result /= 100000;
-            return result;
-        }
+                if (Remainder - _softCapStep > 0)
+                {
+                    Result += _softCapStep * Value;
+                    Remainder -= _softCapStep;
+                    Value = MathHelper.Clamp(Value - (_softCapStep * _softCapMagnitude), 0, 1);
+                }
+                else
+                {
+                    Result += Remainder * Value;
+                    Remainder = 0;
+                }
 
+
+            } while (Remainder > 0);
+
+
+
+            return Result;
+        }
 
 
 

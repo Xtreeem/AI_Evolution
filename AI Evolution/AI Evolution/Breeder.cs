@@ -107,7 +107,7 @@ namespace AI_Evolution
         const bool _mutationEnabled = true;
         const float _mutationPercent = 50f;
         const int _mutationMagnitude = 5;
-        public static List<Actor> Breed_Actors(List<Tuple<float, Actor>> Stock)
+        public static List<Actor> Breed_Actors(List<Tuple<float , Actor>> Stock)
         {
             Actor[] debug = new Actor[2];
             List<Actor> tResult = new List<Actor>();
