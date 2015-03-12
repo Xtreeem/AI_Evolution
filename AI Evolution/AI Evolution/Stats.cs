@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 
 namespace AI_Evolution
 {
-   public class Stats
+    public class Stats
     {
         #region Base Stats
         public float Strength { get { return _str; } }
@@ -117,17 +117,17 @@ namespace AI_Evolution
         #region Sub Stat Functions
         private void Calc_CHC()
         {
-            _chc = MathHelper.Clamp(((Dexterity + Intelligence) * 0.4f + Perception * 0.25f)/ 2f, 5f, 50f);
+            _chc = MathHelper.Clamp(((Dexterity + Intelligence) * 0.4f + Perception * 0.25f) / 2f, 5f, 50f);
         }
 
         private void Calc_Dodge()
         {
-            _dodge = MathHelper.Clamp(((Perception * 0.5f + Dexterity * 1.5f) - Size * 0.5f ) / 2f, 0f, 50f);
+            _dodge = MathHelper.Clamp(((Perception + Dexterity) - Size * 0.5f) / 2f, 0f, 50f);
         }
 
         private void Calc_Res()
         {
-            _res = MathHelper.Clamp((Wisdom + Dexterity) / 2f, 0f, 50f);
+            _res = MathHelper.Clamp((Wisdom * 1.5f + Dexterity * 0.5f) / 2f, 0f, 50f);
         }
 
         private void Calc_Size()
@@ -142,12 +142,12 @@ namespace AI_Evolution
 
         private void Calc_Number_of_Attacks()
         {
-            _nAtk = MathHelper.Clamp((_speed) / 10f, 1f, 50f);
+            _nAtk = MathHelper.Clamp((Speed) / 10f, 1f, 50f);
         }
 
         private void Calc_PAtk()
         {
-            _pAtk = MathHelper.Clamp((Strength * 1.25f + Size * 0.75f) / 2f, 0f, 50f);
+            _pAtk = MathHelper.Clamp((Strength * 1.75f + Size * 0.25f) / 2f, 0f, 50f);
         }
         private void Calc_PDef()
         {
@@ -164,17 +164,17 @@ namespace AI_Evolution
 
         private void Calc_MAtk()
         {
-            _mAtk = MathHelper.Clamp((Intelligence + Faith) / 2f, 5f, 50f);
+            _mAtk = MathHelper.Clamp((Intelligence * 1.5f + Faith * 0.5f) / 2f, 5f, 50f);
         }
 
         private void Calc_MDef()
         {
-            _mDef = MathHelper.Clamp((Faith + Wisdom) / 2f, 5f, 50f);
+            _mDef = MathHelper.Clamp((Faith * 0.75f + Wisdom * 1.25f) / 2f, 5f, 50f);
         }
 
         private void Calc_Mana()
         {
-            _mp = MathHelper.Clamp((Intelligence + Faith) / 20f, 1f, 5f);
+            _mp = MathHelper.Clamp((Wisdom) / 10f, 1f, 5f);
         }
         private void Calc_Init()
         {
