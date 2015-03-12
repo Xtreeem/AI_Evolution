@@ -12,6 +12,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.IO;
 
+using Microsoft.Office.Core;
+using Excel = Microsoft.Office.Interop.Excel;
+
+
 namespace AI_Evolution
 {
     enum GameState
@@ -22,6 +26,14 @@ namespace AI_Evolution
 
     public class Game1 : Microsoft.Xna.Framework.Game
     {
+
+        object _mValue = System.Reflection.Missing.Value;
+        Excel.Workbooks _myEBooks;
+        Excel.Workbook _myEBook;
+        Excel.Application _myEApp;
+        Excel.Worksheet _myESheet;
+
+
         List<List<float>> _averageStats = new List<List<float>>();
 
 
@@ -89,7 +101,20 @@ namespace AI_Evolution
             Tscene = new Scene(Thero, Tenemy);
             Tscene.Update(new GameTime(), 0);
 
-
+            _myEApp = new Excel.Application();
+            _myEBook = _myEApp.Workbooks.Add(_mValue);
+            _myESheet = (Excel.Worksheet)_myEBook.Worksheets.get_Item(1);
+            _myESheet.Cells[1, 1] = "Str";
+            _myESheet.Cells[1, 2] = "Con";
+            _myESheet.Cells[1, 3] = "Dex";
+            _myESheet.Cells[1, 4] = "Int";
+            _myESheet.Cells[1, 5] = "Wis";
+            _myESheet.Cells[1, 6] = "Fth";
+            _myESheet.Cells[1, 7] = "Per";
+            _myESheet = (Excel.Worksheet)_myEBook.Worksheets.get_Item(1);
+            _myEBook.SaveAs(@"sharp-Excel.xls", Excel.XlFileFormat.xlWorkbookNormal, _mValue, _mValue, _mValue, _mValue, Excel.XlSaveAsAccessMode.xlExclusive, _mValue, _mValue, _mValue, _mValue, _mValue);
+            _myEBook.Close(true, _mValue, _mValue);
+            _myEApp.Quit();
             base.Initialize();
         }
 
@@ -237,37 +262,40 @@ namespace AI_Evolution
             if (_generation % 100 == 0)
                 Console.WriteLine("Trialing Generation: " + _generation);
         }
-
         private void Write_to_File()
         {
-            Actor bH = _heroes[0];
-            Actor wH = _heroes[_numberOfScenes - 1];
-            StreamWriter sW = new StreamWriter(@"BestHero.txt", true);
 
-            sW.WriteLine("\n" + _generation + ":\t" + bH.Stats.Strength + "\t" + bH.Stats.Constitution + "\t" + bH.Stats.Dexterity + "\t" + bH.Stats.Intelligence + "\t" + bH.Stats.Wisdom + "\t" + bH.Stats.Faith + "\t" + bH.Stats.Perception + "\t");
-            sW.Close();
-            sW = new StreamWriter(@"WorstHero.txt", true);
-            sW.WriteLine("\n"+_generation + ":\t" + wH.Stats.Strength + "\t" + wH.Stats.Constitution + "\t" + wH.Stats.Dexterity + "\t" + wH.Stats.Intelligence + "\t" + wH.Stats.Wisdom + "\t" + wH.Stats.Faith + "\t" + wH.Stats.Perception + "\t");
-            sW.Close();
-            sW = new StreamWriter(@"AverageStat.txt", true);
-            sW.WriteLine("\n" + _generation + "\t" + _averageStats[_generation - 1][0] + "\t" + _averageStats[_generation - 1][1] + "\t" + _averageStats[_generation - 1][2] + "\t" + _averageStats[_generation - 1][3] + "\t" + _averageStats[_generation - 1][4] + "\t" + _averageStats[_generation - 1][5] + "\t" + _averageStats[_generation - 1][6]);
-            sW.Close();
-            sW = new StreamWriter(@"Change.txt", true);
-            if (_generation != 1)
-            sW.WriteLine(
-                "\n" + _generation + ":\t" +
-                    (_averageStats[_generation - 1][0] - _averageStats[_generation - 2][0]) + "\t" +
-                    (_averageStats[_generation - 1][1] - _averageStats[_generation - 2][1]) + "\t" +
-                    (_averageStats[_generation - 1][2] - _averageStats[_generation - 2][2]) + "\t" +
-                    (_averageStats[_generation - 1][3] - _averageStats[_generation - 2][3]) + "\t" +
-                    (_averageStats[_generation - 1][4] - _averageStats[_generation - 2][4]) + "\t" +
-                    (_averageStats[_generation - 1][5] - _averageStats[_generation - 2][5]) + "\t" +
-                    (_averageStats[_generation - 1][6] - _averageStats[_generation - 2][6]) + "\t"
-                    );
-            else
-                sW.WriteLine("\n" + _generation + ":\t" +0 + "\t" + 0 + "\t" + 0 + "\t" + 0 + "\t" + 0 + "\t" + 0 + "\t" + 0);
-            sW.Close();
         }
+        //private void Write_to_File()
+        //{
+        //    Actor bH = _heroes[0];
+        //    Actor wH = _heroes[_numberOfScenes - 1];
+        //    StreamWriter sW = new StreamWriter(@"BestHero.txt", true);
+
+        //    sW.WriteLine("\n" + _generation + ":\t" + bH.Stats.Strength + "\t" + bH.Stats.Constitution + "\t" + bH.Stats.Dexterity + "\t" + bH.Stats.Intelligence + "\t" + bH.Stats.Wisdom + "\t" + bH.Stats.Faith + "\t" + bH.Stats.Perception + "\t");
+        //    sW.Close();
+        //    sW = new StreamWriter(@"WorstHero.txt", true);
+        //    sW.WriteLine("\n"+_generation + ":\t" + wH.Stats.Strength + "\t" + wH.Stats.Constitution + "\t" + wH.Stats.Dexterity + "\t" + wH.Stats.Intelligence + "\t" + wH.Stats.Wisdom + "\t" + wH.Stats.Faith + "\t" + wH.Stats.Perception + "\t");
+        //    sW.Close();
+        //    sW = new StreamWriter(@"AverageStat.txt", true);
+        //    sW.WriteLine("\n" + _generation + "\t" + _averageStats[_generation - 1][0] + "\t" + _averageStats[_generation - 1][1] + "\t" + _averageStats[_generation - 1][2] + "\t" + _averageStats[_generation - 1][3] + "\t" + _averageStats[_generation - 1][4] + "\t" + _averageStats[_generation - 1][5] + "\t" + _averageStats[_generation - 1][6]);
+        //    sW.Close();
+        //    sW = new StreamWriter(@"Change.txt", true);
+        //    if (_generation != 1)
+        //    sW.WriteLine(
+        //        "\n" + _generation + ":\t" +
+        //            (_averageStats[_generation - 1][0] - _averageStats[_generation - 2][0]) + "\t" +
+        //            (_averageStats[_generation - 1][1] - _averageStats[_generation - 2][1]) + "\t" +
+        //            (_averageStats[_generation - 1][2] - _averageStats[_generation - 2][2]) + "\t" +
+        //            (_averageStats[_generation - 1][3] - _averageStats[_generation - 2][3]) + "\t" +
+        //            (_averageStats[_generation - 1][4] - _averageStats[_generation - 2][4]) + "\t" +
+        //            (_averageStats[_generation - 1][5] - _averageStats[_generation - 2][5]) + "\t" +
+        //            (_averageStats[_generation - 1][6] - _averageStats[_generation - 2][6]) + "\t"
+        //            );
+        //    else
+        //        sW.WriteLine("\n" + _generation + ":\t" +0 + "\t" + 0 + "\t" + 0 + "\t" + 0 + "\t" + 0 + "\t" + 0 + "\t" + 0);
+        //    sW.Close();
+        //}
 
 
         private void Debug_print_change(int GenerationsBack)
