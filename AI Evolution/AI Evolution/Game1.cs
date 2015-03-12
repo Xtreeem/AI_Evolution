@@ -31,7 +31,7 @@ namespace AI_Evolution
         Excel.Workbooks _myEBooks;
         Excel.Workbook _myEBook;
         Excel.Application _myEApp;
-        Excel.Worksheet _myESheet;
+        Excel.Worksheet _myESheet1,_myESheet2,_myESheet3,_myESheet4;
 
 
         List<List<float>> _averageStats = new List<List<float>>();
@@ -100,22 +100,54 @@ namespace AI_Evolution
             Tenemy = new Hero(new Stats(10, 10, 10000, 10, 10, 10, 10));
             Tscene = new Scene(Thero, Tenemy);
             Tscene.Update(new GameTime(), 0);
+            Set_up_Excel();
+            
+            base.Initialize();
+        }
 
+        private void Set_up_Excel()
+        {
             _myEApp = new Excel.Application();
             _myEBook = _myEApp.Workbooks.Add(_mValue);
-            _myESheet = (Excel.Worksheet)_myEBook.Worksheets.get_Item(1);
-            _myESheet.Cells[1, 1] = "Str";
-            _myESheet.Cells[1, 2] = "Con";
-            _myESheet.Cells[1, 3] = "Dex";
-            _myESheet.Cells[1, 4] = "Int";
-            _myESheet.Cells[1, 5] = "Wis";
-            _myESheet.Cells[1, 6] = "Fth";
-            _myESheet.Cells[1, 7] = "Per";
-            _myESheet = (Excel.Worksheet)_myEBook.Worksheets.get_Item(1);
-            _myEBook.SaveAs(@"sharp-Excel.xls", Excel.XlFileFormat.xlWorkbookNormal, _mValue, _mValue, _mValue, _mValue, Excel.XlSaveAsAccessMode.xlExclusive, _mValue, _mValue, _mValue, _mValue, _mValue);
+            _myESheet1 = (Excel.Worksheet)_myEBook.Worksheets.get_Item(1);
+            _myESheet2 = (Excel.Worksheet)_myEBook.Worksheets.Add(_mValue, _mValue, 1, _mValue);
+            _myESheet3 = (Excel.Worksheet)_myEBook.Worksheets.Add(_mValue, _mValue, 1, _mValue);
+            _myESheet4 = (Excel.Worksheet)_myEBook.Worksheets.Add(_mValue, _mValue, 1, _mValue);
+            _myESheet1.Cells[1, 1] = "Str";
+            _myESheet1.Cells[1, 2] = "Con";
+            _myESheet1.Cells[1, 3] = "Dex";
+            _myESheet1.Cells[1, 4] = "Int";
+            _myESheet1.Cells[1, 5] = "Wis";
+            _myESheet1.Cells[1, 6] = "Fth";
+            _myESheet1.Cells[1, 7] = "Per";
+
+            _myESheet2.Cells[1, 1] = "Str";
+            _myESheet2.Cells[1, 2] = "Con";
+            _myESheet2.Cells[1, 3] = "Dex";
+            _myESheet2.Cells[1, 4] = "Int";
+            _myESheet2.Cells[1, 5] = "Wis";
+            _myESheet2.Cells[1, 6] = "Fth";
+            _myESheet2.Cells[1, 7] = "Per";
+
+
+            _myESheet3.Cells[1, 1] = "Str";
+            _myESheet3.Cells[1, 2] = "Con";
+            _myESheet3.Cells[1, 3] = "Dex";
+            _myESheet3.Cells[1, 4] = "Int";
+            _myESheet3.Cells[1, 5] = "Wis";
+            _myESheet3.Cells[1, 6] = "Fth";
+            _myESheet3.Cells[1, 7] = "Per";
+
+            _myESheet4.Cells[1, 1] = "Str";
+            _myESheet4.Cells[1, 2] = "Con";
+            _myESheet4.Cells[1, 3] = "Dex";
+            _myESheet4.Cells[1, 4] = "Int";
+            _myESheet4.Cells[1, 5] = "Wis";
+            _myESheet4.Cells[1, 6] = "Fth";
+            _myESheet4.Cells[1, 7] = "Per";
+            _myEBook.SaveAs(string.Format(@"Results_{0}.xls", DateTime.Now.ToString("h_mm_ss")), Excel.XlFileFormat.xlWorkbookNormal, _mValue, _mValue, _mValue, _mValue, Excel.XlSaveAsAccessMode.xlExclusive, _mValue, _mValue, _mValue, _mValue, _mValue);
             _myEBook.Close(true, _mValue, _mValue);
             _myEApp.Quit();
-            base.Initialize();
         }
 
         protected override void LoadContent()
@@ -264,6 +296,67 @@ namespace AI_Evolution
         }
         private void Write_to_File()
         {
+            int lineNumber = _generation +1;
+            Actor bH = _heroes[0];
+            Actor wH = _heroes[_numberOfScenes - 1];
+            #region Best Hero
+            _myESheet1.Cells[lineNumber, 1] = _generation;
+            _myESheet1.Cells[lineNumber, 2] = bH.Stats.Strength;
+            _myESheet1.Cells[lineNumber, 3] = bH.Stats.Constitution;
+            _myESheet1.Cells[lineNumber, 4] = bH.Stats.Dexterity;
+            _myESheet1.Cells[lineNumber, 5] = bH.Stats.Intelligence;
+            _myESheet1.Cells[lineNumber, 6] = bH.Stats.Wisdom;
+            _myESheet1.Cells[lineNumber, 7] = bH.Stats.Faith;
+            _myESheet1.Cells[lineNumber, 8] = bH.Stats.Perception;
+            #endregion
+
+            #region Worst Hero
+            _myESheet2.Cells[lineNumber, 1] = _generation + ":";
+            _myESheet2.Cells[lineNumber, 2] = wH.Stats.Strength;
+            _myESheet2.Cells[lineNumber, 3] = wH.Stats.Constitution;
+            _myESheet2.Cells[lineNumber, 4] = wH.Stats.Dexterity;
+            _myESheet2.Cells[lineNumber, 5] = wH.Stats.Intelligence;
+            _myESheet2.Cells[lineNumber, 6] = wH.Stats.Wisdom;
+            _myESheet2.Cells[lineNumber, 7] = wH.Stats.Faith;
+            _myESheet2.Cells[lineNumber, 8] = wH.Stats.Perception;
+            #endregion
+
+            #region Average Stats
+            _myESheet3.Cells[lineNumber, 1] = _generation + ":";
+            _myESheet3.Cells[lineNumber, 2] = _averageStats[_generation - 1][0];
+            _myESheet3.Cells[lineNumber, 3] = _averageStats[_generation - 1][1];
+            _myESheet3.Cells[lineNumber, 4] = _averageStats[_generation - 1][2];
+            _myESheet3.Cells[lineNumber, 5] = _averageStats[_generation - 1][3];
+            _myESheet3.Cells[lineNumber, 6] = _averageStats[_generation - 1][4];
+            _myESheet3.Cells[lineNumber, 7] = _averageStats[_generation - 1][5];
+            _myESheet3.Cells[lineNumber, 8] = _averageStats[_generation - 1][6];
+            #endregion
+
+            #region Change in Stats
+            if (_generation != 1)
+            {
+                _myESheet4.Cells[lineNumber, 1] = _generation + ":";
+                _myESheet4.Cells[lineNumber, 2] = _averageStats[_generation - 1][0] - _averageStats[_generation - 2][0];
+                _myESheet4.Cells[lineNumber, 3] = _averageStats[_generation - 1][1] - _averageStats[_generation - 2][1];
+                _myESheet4.Cells[lineNumber, 4] = _averageStats[_generation - 1][2] - _averageStats[_generation - 2][2];
+                _myESheet4.Cells[lineNumber, 5] = _averageStats[_generation - 1][3] - _averageStats[_generation - 2][3];
+                _myESheet4.Cells[lineNumber, 6] = _averageStats[_generation - 1][4] - _averageStats[_generation - 2][4];
+                _myESheet4.Cells[lineNumber, 7] = _averageStats[_generation - 1][5] - _averageStats[_generation - 2][5];
+                _myESheet4.Cells[lineNumber, 8] = _averageStats[_generation - 1][6] - _averageStats[_generation - 2][6];
+
+            }
+            else
+            {
+                _myESheet4.Cells[lineNumber, 1] = _generation + ":";
+                _myESheet4.Cells[lineNumber, 2] = 0;
+                _myESheet4.Cells[lineNumber, 3] = 0;
+                _myESheet4.Cells[lineNumber, 4] = 0;
+                _myESheet4.Cells[lineNumber, 5] = 0;
+                _myESheet4.Cells[lineNumber, 6] = 0;
+                _myESheet4.Cells[lineNumber, 7] = 0;
+                _myESheet4.Cells[lineNumber, 8] = 0;
+            }
+            #endregion
 
         }
         //private void Write_to_File()
