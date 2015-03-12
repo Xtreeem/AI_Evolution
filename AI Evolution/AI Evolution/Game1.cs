@@ -114,6 +114,7 @@ namespace AI_Evolution
             _myESheetWorstHero = (Excel.Worksheet)_myEBook.Worksheets.Add(_mValue, _mValue, 1, _mValue);
             _myESheetAverageStat = (Excel.Worksheet)_myEBook.Worksheets.Add(_mValue, _mValue, 1, _mValue);
             _myESheetChange = (Excel.Worksheet)_myEBook.Worksheets.Add(_mValue, _mValue, 1, _mValue);
+
             _myESheetBestHero.Name = "Best Hero";
             _myESheetBestHero.Cells[1, 2] = "Str";
             _myESheetBestHero.Cells[1, 3] = "Con";
