@@ -47,5 +47,10 @@ namespace AI_Evolution
             else
                 Log.Add(new CombatLogEntry(Turn, Type, Attacker, Defender, 0f, Hit));
         }
+
+        public void AddEntry(CombatLogEntry Entry)
+        {
+            Log.Add(Entry);
+        }
     }
 }

@@ -59,6 +59,51 @@ namespace AI_Evolution
             }
         }
 
+
+        private void Start_Combat_Turn()
+        {
+            int Decider;
+            _hero.Select_Attacks();
+            _enemy.Select_Attacks();
+            _heroHealthAtTurnStart = _hero.Current_Health;
+            _enemyHealthAtTurnStart = _enemy.Current_Health;
+            Actor inititiveWinner;
+            Actor inititiveLoser;
+            Roll_for_Initiative(out inititiveWinner, out inititiveLoser);
+            do
+            {
+                if (inititiveWinner.Attacks.Count > 0)
+                {
+
+                    Decider = Misc.Random.Next(0, inititiveWinner.Attacks.Count);
+                    _log.AddEntry(inititiveWinner.Attacks[Decider].Execute(ref inititiveWinner, ref inititiveLoser, _turnCounter));
+                    inititiveWinner.Remove_Attack(Decider);
+                    if (Death_Check(ref inititiveLoser))
+                    { Combat_Over(); return; }
+                }
+                if (inititiveLoser.Attacks.Count > 0)
+                {
+
+                    Decider = Misc.Random.Next(0, inititiveLoser.Attacks.Count);
+                    _log.AddEntry(inititiveLoser.Attacks[Decider].Execute(ref inititiveLoser, ref inititiveWinner, _turnCounter));
+                    inititiveLoser.Remove_Attack(Decider);
+                    if (Death_Check(ref inititiveWinner))
+                    { Combat_Over(); return; }
+                }
+                Roll_for_Initiative(out inititiveWinner, out inititiveLoser);
+            } while (_hero.Attacks.Count + _enemy.Attacks.Count > 0);
+
+            Recovery_Phase();
+            _turnCounter++;
+        }
+
+
+
+
+        /// <summary>
+        /// Old Combat System
+        /// </summary>
+        /*
         private void Start_Combat_Turn()
         {
             _heroHealthAtTurnStart = _hero.Current_Health;
@@ -79,35 +124,8 @@ namespace AI_Evolution
             _turnCounter++;
         }
 
-        private void Combat_Over()
-        {
-            _finished = true;
-            //_fitnessValue = Math.Abs(MathHelper.Clamp(_enemy.Current_Health, 0, _enemy.Stats.Health) - _enemy.Stats.Health);
-            _fitnessValue = Math.Abs(_enemy.Current_Health - _enemy.Stats.Health);
-            if (_fitnessValue == 0)
-                Console.Write("");
-        }
 
-        private void Roll_for_Initiative(out Actor Winner, out Actor Loser)
-        {
-            float heroInitiativeRoll = _rand.Next(1, 1);
-            float enemyInitiativeRoll = _rand.Next(1, 1);
-            heroInitiativeRoll += _hero.Stats.Initiative;
-            enemyInitiativeRoll += _enemy.Stats.Initiative;
-
-            if (heroInitiativeRoll > enemyInitiativeRoll)
-            {
-                Winner = _hero;
-                Loser = _enemy;
-                return;
-            }
-            else
-            {
-                Winner = _enemy;
-                Loser = _hero;
-                return;
-            }
-        }
+        
 
         private bool Physical_Phase(ref Actor A1, ref Actor A2)
         {
@@ -204,6 +222,36 @@ namespace AI_Evolution
                 _log.AddEntry(_turnCounter, AttackType.Magical, Attacker, Defender, MathHelper.Clamp(((Attacker.Stats.Magic_Attack * 1) * (1 - Defender.Stats.Magic_Resist / 100)) * (1 - (Defender.Stats.Dodge_Chance / 100)), 0, 100000), true);
                 //Defender.Take_Damage(MathHelper.Clamp(((Attacker.Stats.Magic_Attack * 1) * (1 - Defender.Stats.Magic_Resist / 100)) * (1 - (Defender.Stats.Dodge_Chance / 100)), 0, 100000));
                 Defender.Take_Damage(MathHelper.Clamp(Attacker.Stats.Magic_Attack * (1 - (Defender.Stats.Magic_Resist / 100)), 0, 100000));
+            }
+        }
+        */
+        private void Combat_Over()
+        {
+            _finished = true;
+            //_fitnessValue = Math.Abs(MathHelper.Clamp(_enemy.Current_Health, 0, _enemy.Stats.Health) - _enemy.Stats.Health);
+            _fitnessValue = Math.Abs(_enemy.Current_Health - _enemy.Stats.Health);
+            if (_fitnessValue == 0)
+                Console.Write("");
+        }
+
+        private void Roll_for_Initiative(out Actor Winner, out Actor Loser)
+        {
+            float heroInitiativeRoll = _rand.Next(1, 1);
+            float enemyInitiativeRoll = _rand.Next(1, 1);
+            heroInitiativeRoll += _hero.Stats.Initiative;
+            enemyInitiativeRoll += _enemy.Stats.Initiative;
+
+            if (heroInitiativeRoll > enemyInitiativeRoll)
+            {
+                Winner = _hero;
+                Loser = _enemy;
+                return;
+            }
+            else
+            {
+                Winner = _enemy;
+                Loser = _hero;
+                return;
             }
         }
 

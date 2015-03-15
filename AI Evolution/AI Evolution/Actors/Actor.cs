@@ -23,6 +23,9 @@ namespace AI_Evolution
         public string Name { get { return _name; } }
         protected string _name;
 
+        public List<Attack> Attacks { get { return _attacks; } }
+        protected List<Attack> _attacks = new List<Attack>();
+
         public virtual void Draw(SpriteBatch SB)
         {
             _avatar.Draw(SB);
@@ -50,9 +53,26 @@ namespace AI_Evolution
                 _alive = false;
         }
 
+        public void Select_Attacks()
+        {
+            for (int i = 0; i < Stats.Mana; i++)
+            {
+                _attacks.Add(new BasicMagicAttack());
+            }
+            for (int i = 0; i < Stats.Number_of_Attacks; i++)
+            {
+                _attacks.Add(new BasicPhysicalAttack());
+            }
+        }
+
+        public void Remove_Attack(int Index)
+        {
+            _attacks.RemoveAt(Index);
+        }
+
         public void Heal(float Amount)
         {
-           _current_Health = MathHelper.Clamp(_current_Health + Amount, 1, _stats.Health);
+            _current_Health = MathHelper.Clamp(_current_Health + Amount, 1, _stats.Health);
         }
     }
 }
