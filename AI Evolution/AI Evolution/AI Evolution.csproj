@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="Actor.cs" />
     <Compile Include="Battle.cs" />
+    <Compile Include="Boss.cs" />
     <Compile Include="Breeder.cs" />
     <Compile Include="CombatLog.cs" />
     <Compile Include="Enemy.cs" />
