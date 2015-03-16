@@ -12,7 +12,7 @@ namespace AI_Evolution
         public int Cost { get { return _cost; } }
         protected int _cost = 1;
 
-        abstract public CombatLogEntry Execute(ref Actor Attacker, ref Actor Defender, int Turn);
+        abstract public CombatLogEntry Execute(ref Actor Attacker, ref Actor Defender, int Turn, Random Random);
 
     }
 }

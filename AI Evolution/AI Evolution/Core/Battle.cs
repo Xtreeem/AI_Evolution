@@ -76,7 +76,7 @@ namespace AI_Evolution
                 {
 
                     Decider = Misc.Random.Next(0, inititiveWinner.Attacks.Count);
-                    _log.AddEntry(inititiveWinner.Attacks[Decider].Execute(ref inititiveWinner, ref inititiveLoser, _turnCounter));
+                    _log.AddEntry(inititiveWinner.Attacks[Decider].Execute(ref inititiveWinner, ref inititiveLoser, _turnCounter, _rand));
                     inititiveWinner.Remove_Attack(Decider);
                     if (Death_Check(ref inititiveLoser))
                     { Combat_Over(); return; }
@@ -85,7 +85,7 @@ namespace AI_Evolution
                 {
 
                     Decider = Misc.Random.Next(0, inititiveLoser.Attacks.Count);
-                    _log.AddEntry(inititiveLoser.Attacks[Decider].Execute(ref inititiveLoser, ref inititiveWinner, _turnCounter));
+                    _log.AddEntry(inititiveLoser.Attacks[Decider].Execute(ref inititiveLoser, ref inititiveWinner, _turnCounter, _rand));
                     inititiveLoser.Remove_Attack(Decider);
                     if (Death_Check(ref inititiveWinner))
                     { Combat_Over(); return; }

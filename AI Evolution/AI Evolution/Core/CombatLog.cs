@@ -42,6 +42,8 @@ namespace AI_Evolution
 
         public void AddEntry(int Turn, AttackType Type, Actor Attacker, Actor Defender, float Damage, bool Hit)
         {
+            if (Log.Count > 100000)
+                Console.Write("");
             if (Hit)
                 Log.Add(new CombatLogEntry(Turn, Type, Attacker, Defender, Damage, Hit));
             else
@@ -50,6 +52,8 @@ namespace AI_Evolution
 
         public void AddEntry(CombatLogEntry Entry)
         {
+            if (Log.Count > 100000)
+                Console.Write("");
             Log.Add(Entry);
         }
     }
